@@ -6,8 +6,7 @@ import { Entity } from '@backstage/catalog-model';
 import { Grid } from '@material-ui/core';
 import { Filters, FilterOptions } from './types';
 import { getAnnotation, searchFunction } from './utils';
-import { FilterSidebar } from './FilterSidebar';
-import { UsefulLinks } from './UsefulLinks';
+import { SidebarContainer } from './SidebarContainer';
 import { ProjectsTable } from './ProjectsTable';
 import { SearchBar } from './SearchBar';
 
@@ -129,14 +128,13 @@ export function AIShowcasePage() {
         {!loading && !error && (
           <Grid container spacing={3}>
             <Grid item xs={12} md={3}>
-              <FilterSidebar
+              <SidebarContainer
                 filters={filters}
                 filterOptions={filterOptions}
                 onFilterChange={handleFilterChange}
                 onClearFilters={clearFilters}
                 hasActiveFilters={hasActiveFilters}
               />
-              <UsefulLinks />
             </Grid>
             <Grid item xs={12} md={9}>
               <SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} />

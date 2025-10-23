@@ -15,8 +15,7 @@ import { Filters, FilterOptions } from './types';
 const useStyles = makeStyles((theme) => ({
   filterSidebar: {
     padding: theme.spacing(2),
-    position: 'sticky',
-    top: theme.spacing(2),
+    backgroundColor: theme.palette.background.paper,
   },
   filterSection: {
     marginBottom: theme.spacing(2),

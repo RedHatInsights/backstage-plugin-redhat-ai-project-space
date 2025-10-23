@@ -8,6 +8,7 @@ const useStyles = makeStyles((theme) => ({
   linksSidebar: {
     padding: theme.spacing(2),
     marginTop: theme.spacing(2),
+    backgroundColor: theme.palette.background.paper,
   },
   linkButton: {
     width: '100%',
