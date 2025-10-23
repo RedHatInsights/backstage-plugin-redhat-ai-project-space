@@ -9,6 +9,7 @@ import { getAnnotation, searchFunction } from './utils';
 import { SidebarContainer } from './SidebarContainer';
 import { ProjectsList } from './ProjectsList';
 import { SearchBar } from './SearchBar';
+import FloatingChat from './FloatingChat';
 
 export function AIShowcasePage() {
   const catalogApi = useApi(catalogApiRef);
@@ -143,6 +144,7 @@ export function AIShowcasePage() {
           </Grid>
         )}
       </Content>
+      <FloatingChat />
     </Page>
   );
 }
