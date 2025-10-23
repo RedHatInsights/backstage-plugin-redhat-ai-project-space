@@ -1,0 +1,20 @@
+{
+  "extends": "@backstage/cli/config/tsconfig.json",
+  "include": [
+    "packages/*/src",
+    "plugins/*/src",
+    "plugins/*/dev",
+    "plugins/*/migrations"
+  ],
+  "exclude": ["node_modules"],
+  "compilerOptions": {
+    "outDir": "dist-types",
+    "rootDir": ".",
+    "baseUrl": ".",
+    "paths": {
+      "@redhatinsights/backstage-plugin-visual-qontract": ["./plugins/visual-qontract"],
+      "@redhatinsights/backstage-plugin-webrca-backend": ["./plugins/webrca-backend"],
+      "@redhatinsights/backstage-plugin-webrca-frontend": ["./plugins/webrca-frontend"]
+    }
+  }
+}
