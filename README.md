@@ -1,30 +1,16 @@
-# Visual Qontract Dynamic Plugin
+# Red Hat AI Project Space Dynamic Plugin
 
-This is a development mono-repo for multiple Red Hat Hybrid Cloud Management RHDH plugins. This mono-repo was created using @backstage/create-app to provide a backend and frontend for the plugin to integrate with.
+This is a development mono-repo for the Red Hat AI Project Space RHDH plugin. This mono-repo was created using @backstage/create-app to provide a backend and frontend for the plugin to integrate with.
 
-Included Plugins: 
-* Visual Qontract: `plugins/visual-qontract` Presents data from App Interface
-* WebRCA Frontend: `plugins/webrca-frontend` A frontend plugin for Web RCA
-* WebRCA Backend: `plugins/webrca-backend` A backend plugin for Web RCA 
+Included Plugin: 
+* Red Hat AI Project Space: `plugins/redhat-ai-project-space` - AI Showcase page component 
 
 ## Components
 
-### Visual Qontract Entity Page Cards
-This plugin provides multiple info card components that can be mounted on a catalog entry page.
-* `EntityQontractDependenciesContent`: Shows CI and code dependencies along with links to status pages and SLOs
-* `EntityQontractNamespacesContent`: Shows namespaces and clusters, with links, where an app is running
-* `EntityQontractCodeComponentsContent`: Shows code repositories and build jobs
-* `EntityQontractPipelinesComponent`: Shows deploy pipelines with links out to the deploy privders
-* `EntityQontractSLOComponent`: Shows cards with gauges for SLIs
-* `EntityQontractEscalationPolicyComponent`: Show's escalation policies for an app
+### Page Component
+This plugin provides a page component for the AI Showcase:
 
-### Page Plugins
-We also provide 3 pages that can extend the functionality of Janus IDP / RHDH.
-
-* `EntityQontractHomePageComponent`: A more feature and information rich homepage than ships with Janus / RHDH by default
-* `EntityQontractNewsComponent`: A news page with searching, filters, etc
-* `WebRCAFetchComponent`: A page to show WebRCA Incidents
-* `ChangelogPageComponent`: A page to show App SRE Changelog
+* `AIShowcasePageComponent`: A page to showcase AI capabilities and features
 
 ## Dependencies 
 You'll need to have the `inscope-resources` pod running. This pod contains the resources like new stories used on the front page.
@@ -116,122 +102,21 @@ proxy:
 ```
 
 ## RHDH Dynamic Plugin Config
-Here's an example of how to configure all of the various plugins in your dynmaic plugins config for RHDH.
+Here's an example of how to configure the plugin in your dynamic plugins config for RHDH.
 
 ```yaml
-  - package: "https://github.com/RedHatInsights/backstage-plugin-visual-qontract/releases/download/DEVELOPMENT-0.2/redhatinsights-backstage-plugin-webrca-backend-1.1.1.tgz"
-    disabled: false
-    integrity: "sha256-pqQaI2i1pNs5tfW8Sj1vG5Fx4KGqQfguxr0CPU6Fcvo="
-
-  - package: "https://github.com/RedHatInsights/backstage-plugin-visual-qontract/releases/download/DEVELOPMENT-0.2/redhatinsights-backstage-plugin-webrca-frontend-1.1.2.tgz"
-    integrity: "sha256-s1YJRO8AknX7fIg68zhHDTKW97HwIbY2CYBKTu/Zl68="
+  - package: "backstage-plugin-redhat-ai-project-space-1.6.7.tgz"
     disabled: false
     pluginConfig:
       dynamicPlugins:
         frontend:
-          redhatinsights.backstage-plugin-webrca-frontend:
-            entityTabs:
-              - path: /incidents
-                title: Incidents
-                mountPoint: entity.page.incidents
-            mountPoints:
-              - mountPoint: 'entity.page.incidents/cards'
-                importName: WebRcaPage
-                config:
-                  layout:
-                    gridColumn: "1 / span 12"
-                  if:
-                    allOf:
-                      - isKind: component
-                      - isType: service
-
-  - package: "https://github.com/RedHatInsights/backstage-plugin-visual-qontract/releases/download/DEVELOPMENT-0.1/redhatinsights-backstage-plugin-visual-qontract-1.3.6.tgz"
-    disabled: false
-    integrity: "sha256-AYIZ6vnhwAmtT/l6TARNtGJPeQUOfM4rY5zdtceffog="
-    pluginConfig:
-      dynamicPlugins:
-        frontend:
-          redhatinsights.backstage-plugin-visual-qontract:
+          backstage-plugin-redhat-ai-project-space:
             dynamicRoutes:
-              - path: /
-                importName: EntityQontractHomePageComponent
-              - path: /changelog
-                importName: ChangelogPageComponent
+              - path: /ai-showcase
+                importName: AIShowcasePageComponent
                 menuItem:
-                  icon: system
-                  text: Changelog
-              - path: /news
-                importName: EntityQontractNewsComponent
-                menuItem:
-                  icon: techdocs
-                  text: News
-            mountPoints:
-              - mountPoint: entity.page.overview/cards
-                importName: EntityQontractNamespacesContent
-                config:
-                  layout:
-                    gridColumnEnd:
-                      lg: "span 4"
-                      md: "span 6"
-                      xs: "span 12"
-                  if:
-                    allOf:
-                      - isType: application
-              - mountPoint: entity.page.overview/cards
-                importName: EntityQontractPipelinesComponent
-                config:
-                  layout:
-                    gridColumnEnd:
-                      lg: "span 4"
-                      md: "span 6"
-                      xs: "span 12"
-                  if:
-                    allOf:
-                      - isType: application
-              - mountPoint: entity.page.overview/cards
-                importName: EntityQontractCodeComponentsContent
-                config:
-                  layout:
-                    gridColumnEnd:
-                      lg: "span 4"
-                      md: "span 6"
-                      xs: "span 12"
-                  if:
-                    allOf:
-                      - isType: application
-              - mountPoint: entity.page.overview/cards
-                importName: EntityQontractEscalationPolicyComponent
-                config:
-                  layout:
-                    gridColumnEnd:
-                      lg: "span 4"
-                      md: "span 6"
-                      xs: "span 12"
-                  if:
-                    allOf:
-                      - isType: application
-              - mountPoint: entity.page.overview/cards
-                importName: EntityQontractDependenciesContent
-                config:
-                  layout:
-                    gridColumnEnd:
-                      lg: "span 4"
-                      md: "span 6"
-                      xs: "span 12"
-                  if:
-                    allOf:
-                      - isType: application
-              - mountPoint: entity.page.overview/cards
-                importName: EntityQontractSLOComponent
-                config:
-                  layout:
-                    gridColumnEnd:
-                      lg: "span 6"
-                      md: "span 6"
-                      xs: "span 12"
-                  if:
-                    allOf:
-                      - isType: application
+                  icon: extension
+                  text: AI Showcase
 ```
 ## Development
 To start the app, run:

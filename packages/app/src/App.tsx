@@ -39,12 +39,8 @@ import { RequirePermission } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
 
 import {
-  EntityQontractHomePageComponent,
-  EntityQontractNewsComponent,
-  ChangelogPageComponent,
-  IncidentResponseComponent,
   AIShowcasePageComponent,
-} from '@redhatinsights/backstage-plugin-visual-qontract';
+} from 'backstage-plugin-redhat-ai-project-space';
 
 const app = createApp({
   apis,
@@ -72,13 +68,7 @@ const app = createApp({
 
 const routes = (
   <FlatRoutes>
-    <Route path="/" element={<EntityQontractHomePageComponent />} />
-    <Route path="/home" element={<EntityQontractHomePageComponent />} />
-    <Route
-      path="/incident-response"
-      element={<IncidentResponseComponent />}/>
-    <Route path="/news" element={<EntityQontractNewsComponent />} />
-    <Route path="/changelog" element={<ChangelogPageComponent />} />
+    <Route path="/" element={<Navigate to="/ai-showcase" />} />
     <Route path="/ai-showcase" element={<AIShowcasePageComponent />} />
     <Route path="/catalog" element={<CatalogIndexPage />} />
     <Route

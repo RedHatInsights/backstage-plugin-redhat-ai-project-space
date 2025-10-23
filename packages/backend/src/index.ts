@@ -38,6 +38,4 @@ backend.add(import('@backstage/plugin-search-backend/alpha'));
 backend.add(import('@backstage/plugin-search-backend-module-catalog'));
 backend.add(import('@backstage/plugin-search-backend-module-techdocs'));
 
-backend.add(import("@redhatinsights/backstage-plugin-webrca-backend"))
-
 backend.start();

@@ -58,17 +58,6 @@ import {
 import { TechDocsAddons } from '@backstage/plugin-techdocs-react';
 import { ReportIssue } from '@backstage/plugin-techdocs-module-addons-contrib';
 
-import { 
-  EntityVisualQontractContent,
-  EntityQontractDependenciesContent,
-  EntityQontractNamespacesContent,
-  EntityQontractCodeComponentsContent,
-  EntityQontractPipelinesComponent,
-  EntityQontractSLOComponent,
-  EntityQontractEscalationPolicyComponent
-} from '@redhatinsights/backstage-plugin-visual-qontract';
-
-import { WebRCAFetchComponent } from '@redhatinsights/backstage-plugin-webrca-frontend';
 
 const techdocsContent = (
   <EntityTechdocsContent>
@@ -148,27 +137,6 @@ const overviewContent = (
     </Grid>
     <Grid item md={8} xs={12}>
       <EntityHasSubcomponentsCard variant="gridItem" />
-    </Grid>
-    <Grid item md={6}>
-      <EntityQontractDependenciesContent />
-    </Grid>
-    <Grid item md={6}>
-      <EntityQontractNamespacesContent />
-    </Grid>
-    <Grid item md={6}>
-      <EntityQontractCodeComponentsContent />
-    </Grid>
-    <Grid item md={6}>
-      <EntityQontractPipelinesComponent />
-    </Grid>
-    <Grid item md={6}>
-      <EntityQontractSLOComponent />
-    </Grid>
-    <Grid item md={6}>
-      <EntityQontractEscalationPolicyComponent />
-    </Grid>
-    <Grid item md={6}>
-      <WebRCAFetchComponent />
     </Grid>
   </Grid>
 );
@@ -254,11 +222,6 @@ const defaultEntityPage = (
     <EntityLayout.Route path="/docs" title="Docs">
       {techdocsContent}
     </EntityLayout.Route>
-
-    <EntityLayout.Route path="/visual-app-interface" title="Visual App Interface">
-      <EntityVisualQontractContent />
-    </EntityLayout.Route>
-
   </EntityLayout>
 );
 

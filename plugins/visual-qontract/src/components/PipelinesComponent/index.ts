@@ -1,1 +1,0 @@
-export { PipelinesComponent } from './PipelinesComponent';

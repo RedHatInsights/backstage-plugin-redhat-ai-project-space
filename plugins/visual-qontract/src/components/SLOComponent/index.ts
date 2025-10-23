@@ -1,1 +1,0 @@
-export { SLOComponent } from './SLOComponent';

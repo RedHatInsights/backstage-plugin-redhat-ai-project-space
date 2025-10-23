@@ -1,1 +1,0 @@
-export { WebRCAComponent } from './WebRCAComponent';

@@ -1,1 +1,0 @@
-export { VisualQontractComponent  } from './VisualQontractComponent';

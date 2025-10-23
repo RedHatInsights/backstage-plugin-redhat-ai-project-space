@@ -1,1 +1,0 @@
-export { NamespacesComponent } from './NamespacesComponent';

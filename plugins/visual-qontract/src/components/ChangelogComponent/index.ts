@@ -1,1 +1,0 @@
-export { ChangelogComponent } from './ChangelogComponent';
