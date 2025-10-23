@@ -7,7 +7,7 @@ import { Grid } from '@material-ui/core';
 import { Filters, FilterOptions } from './types';
 import { getAnnotation, searchFunction } from './utils';
 import { SidebarContainer } from './SidebarContainer';
-import { ProjectsTable } from './ProjectsTable';
+import { ProjectsList } from './ProjectsList';
 import { SearchBar } from './SearchBar';
 
 export function AIShowcasePage() {
@@ -138,7 +138,7 @@ export function AIShowcasePage() {
             </Grid>
             <Grid item xs={12} md={9}>
               <SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} />
-              <ProjectsTable entities={filteredEntities} />
+              <ProjectsList entities={filteredEntities} />
             </Grid>
           </Grid>
         )}
