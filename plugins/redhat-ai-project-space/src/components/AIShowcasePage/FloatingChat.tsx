@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import ReactDOM from 'react-dom';
 import {
   Box,
   Button,
@@ -274,16 +275,17 @@ const FloatingChat = () => {
     );
   };
 
-  return (
-    <Box>
+  // Render the chat UI in a portal to ensure it's not affected by plugin container styles
+  const chatContent = (
+    <>
       {!open && (
         <IconButton
           onClick={() => setOpen(true)}
           sx={{
-            position: 'fixed',
-            bottom: 24,
-            right: 24,
-            zIndex: 1000,
+            position: 'fixed !important',
+            bottom: '24px !important',
+            right: '24px !important',
+            zIndex: 9999,
             bgcolor: 'primary.main',
             color: 'white',
             '&:hover': {
@@ -291,6 +293,7 @@ const FloatingChat = () => {
             },
             width: 56,
             height: 56,
+            boxShadow: 3,
           }}
         >
           <ChatBubble />
@@ -300,14 +303,14 @@ const FloatingChat = () => {
         <Paper
           elevation={4}
           sx={{
-            position: 'fixed',
-            bottom: 24,
-            right: 24,
+            position: 'fixed !important',
+            bottom: '24px !important',
+            right: '24px !important',
             width: 400,
             height: 600,
             display: 'flex',
             flexDirection: 'column',
-            zIndex: 1300,
+            zIndex: 9999,
             bgcolor: theme.palette.background.paper,
             color: theme.palette.text.primary,
             border: `1px solid ${theme.palette.divider}`,
@@ -398,7 +401,13 @@ const FloatingChat = () => {
           </Box>
         </Paper>
       )}
-    </Box>
+    </>
+  );
+
+  // Use a portal to render outside the plugin's container to avoid CSS conflicts
+  return ReactDOM.createPortal(
+    chatContent,
+    document.body
   );
 };
 
