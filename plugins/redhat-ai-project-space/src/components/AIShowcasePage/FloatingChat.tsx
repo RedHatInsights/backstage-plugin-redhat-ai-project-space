@@ -286,14 +286,16 @@ const FloatingChat = () => {
             bottom: '24px !important',
             right: '24px !important',
             zIndex: 9999,
-            bgcolor: 'primary.main',
-            color: 'white',
+            bgcolor: theme.palette.primary?.main || '#1976d2',
+            color: '#ffffff',
+            opacity: 1,
             '&:hover': {
-              bgcolor: 'primary.dark',
+              bgcolor: theme.palette.primary?.dark || '#115293',
             },
             width: 56,
             height: 56,
-            boxShadow: 3,
+            boxShadow: '0px 3px 5px -1px rgba(0,0,0,0.2), 0px 6px 10px 0px rgba(0,0,0,0.14), 0px 1px 18px 0px rgba(0,0,0,0.12)',
+            borderRadius: '50%',
           }}
         >
           <ChatBubble />
