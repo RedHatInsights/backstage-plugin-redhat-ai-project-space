@@ -31,6 +31,7 @@ const FloatingChat = () => {
     },
   ];
   const [open, setOpen] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
   const [sessionId, setSessionId] = useState(uuidv4());
   const [conversation, setConversation] = useState(greetingMessage);
   const [input, setInput] = useState('');
@@ -39,6 +40,8 @@ const FloatingChat = () => {
   const [aiProjectContext, setAiProjectContext] = useState<string[]>([]);
   const [contextLoadError, setContextLoadError] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
   const config = useApi(configApiRef);
   const identity = useApi(identityApiRef);
   const fetchApi = useApi(fetchApiRef);
@@ -108,6 +111,30 @@ const FloatingChat = () => {
 
   useEffect(scrollToBottom, [conversation]);
 
+  // Focus input when chat is opened and trigger animation
+  useEffect(() => {
+    if (open) {
+      // Trigger animation after a brief delay to ensure DOM is ready
+      setTimeout(() => {
+        setIsAnimating(true);
+      }, 10);
+      
+      // Focus input after animation starts
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 100);
+    }
+  }, [open]);
+
+  // Cleanup: abort any in-flight requests when component unmounts
+  useEffect(() => {
+    return () => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+    };
+  }, []);
+
   const sendMessage = async () => {
     if (!input.trim() || loading) return;
 
@@ -117,6 +144,10 @@ const FloatingChat = () => {
     const userInput = input;
     setInput('');
     setLoading(true);
+
+    // Create abort controller for this request
+    const abortController = new AbortController();
+    abortControllerRef.current = abortController;
 
     try {
       // Check if context is available
@@ -151,6 +182,7 @@ const FloatingChat = () => {
             prompt: systemPrompt,
             userPrompt: userPrompt,
           }),
+          signal: abortController.signal,
         },
       );
 
@@ -214,6 +246,12 @@ const FloatingChat = () => {
       }
 
     } catch (error) {
+      // If the request was aborted, don't show an error message
+      if (error instanceof Error && error.name === 'AbortError') {
+        console.log('Request was aborted');
+        return;
+      }
+
       console.error('Error sending message:', error);
       
       // Determine user-friendly error message
@@ -252,7 +290,13 @@ const FloatingChat = () => {
         ];
       });
     } finally {
+      // Clear the abort controller reference
+      abortControllerRef.current = null;
       setLoading(false);
+      // Return focus to input field for next message
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 100);
     }
   };
 
@@ -261,14 +305,36 @@ const FloatingChat = () => {
     setSessionId(uuidv4());
   };
 
+  const handleOpen = () => {
+    setIsAnimating(false); // Start with false for animation
+    setOpen(true);
+    // Animation will be triggered by useEffect
+  };
+
+  const handleClose = () => {
+    // Trigger closing animation
+    setIsAnimating(false);
+    
+    // Wait for animation to complete before actually closing
+    setTimeout(() => {
+      // Abort any in-flight fetch requests
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+        abortControllerRef.current = null;
+      }
+      // Reset loading state
+      setLoading(false);
+      // Close the window and clear conversation
+      setOpen(false);
+      clearConversation();
+    }, 200); // Match animation duration
+  };
+
   const CloseButton = () => {
     return (
       <IconButton
         size="small"
-        onClick={() => {
-          setOpen(false);
-          clearConversation();
-        }}
+        onClick={handleClose}
       >
         <CloseOutlined fontSize="small" />
       </IconButton>
@@ -279,27 +345,37 @@ const FloatingChat = () => {
   const chatContent = (
     <>
       {!open && (
-        <IconButton
-          onClick={() => setOpen(true)}
+        <Box
+          onClick={handleOpen}
           sx={{
             position: 'fixed !important',
             bottom: '24px !important',
             right: '24px !important',
             zIndex: 9999,
-            bgcolor: theme.palette.primary?.main || '#1976d2',
-            color: '#ffffff',
-            opacity: 1,
-            '&:hover': {
-              bgcolor: theme.palette.primary?.dark || '#115293',
-            },
             width: 56,
             height: 56,
-            boxShadow: '0px 3px 5px -1px rgba(0,0,0,0.2), 0px 6px 10px 0px rgba(0,0,0,0.14), 0px 1px 18px 0px rgba(0,0,0,0.12)',
             borderRadius: '50%',
+            backgroundColor: `${theme.palette.primary?.main || '#1976d2'} !important`,
+            color: '#ffffff !important',
+            display: 'flex !important',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            boxShadow: '0px 3px 5px -1px rgba(0,0,0,0.2), 0px 6px 10px 0px rgba(0,0,0,0.14), 0px 1px 18px 0px rgba(0,0,0,0.12)',
+            transition: 'background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+            '&:hover': {
+              backgroundColor: `${theme.palette.primary?.dark || '#115293'} !important`,
+            },
+            '&:active': {
+              boxShadow: '0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,0,0.14), 0px 3px 14px 2px rgba(0,0,0,0.12)',
+            },
+          }}
+          style={{
+            backgroundColor: theme.palette.primary?.main || '#1976d2',
           }}
         >
           <ChatBubble />
-        </IconButton>
+        </Box>
       )}
       {open && (
         <Paper
@@ -316,12 +392,17 @@ const FloatingChat = () => {
             bgcolor: theme.palette.background.paper,
             color: theme.palette.text.primary,
             border: `1px solid ${theme.palette.divider}`,
+            boxShadow: '0px 8px 16px rgba(0, 0, 0, 0.15), 0px 4px 8px rgba(0, 0, 0, 0.1) !important',
+            transformOrigin: 'bottom right',
+            transition: 'transform 200ms cubic-bezier(0.4, 0, 0.2, 1), opacity 200ms cubic-bezier(0.4, 0, 0.2, 1)',
+            transform: isAnimating ? 'scale(1)' : 'scale(0.3)',
+            opacity: isAnimating ? 1 : 0,
           }}
         >
           <Box sx={{ p: 1, display: 'flex', justifyContent: 'space-between' }}>
             <Typography variant="h6">AI Assistant</Typography>
             <Box>
-              <Button size="small" onClick={clearConversation}>
+              <Button size="small" onClick={clearConversation} disabled={loading}>
                 Clear
               </Button>
               <CloseButton />
@@ -398,6 +479,7 @@ const FloatingChat = () => {
                   sendMessage();
                 }
               }}
+              inputRef={inputRef}
               sx={{ input: { color: theme.palette.text.primary } }}
             />
           </Box>
