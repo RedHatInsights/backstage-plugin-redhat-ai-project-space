@@ -42,6 +42,7 @@ const FloatingChat = () => {
   const chatEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
+  const floatingButtonRef = useRef<HTMLDivElement>(null);
   const config = useApi(configApiRef);
   const identity = useApi(identityApiRef);
   const fetchApi = useApi(fetchApiRef);
@@ -110,6 +111,49 @@ const FloatingChat = () => {
   };
 
   useEffect(scrollToBottom, [conversation]);
+
+  // Force Red Hat red color on the floating button - NUCLEAR OPTION
+  useEffect(() => {
+    if (!open && floatingButtonRef.current) {
+      const element = floatingButtonRef.current;
+      element.style.setProperty('background-color', '#EE0000', 'important');
+      element.style.setProperty('background', '#EE0000', 'important');
+      element.style.setProperty('backgroundColor', '#EE0000', 'important');
+      element.style.setProperty('color', '#ffffff', 'important');
+    }
+  }, [open]);
+
+  // Inject global CSS rules for the floating button - BELT AND SUSPENDERS
+  useEffect(() => {
+    const styleId = 'floating-chat-red-button-force';
+    if (!document.getElementById(styleId)) {
+      const style = document.createElement('style');
+      style.id = styleId;
+      style.textContent = `
+        .floating-chat-button-red[data-redhat-red="true"],
+        .floating-chat-button-red[data-redhat-red="true"] * {
+          background-color: #EE0000 !important;
+          background: #EE0000 !important;
+          color: #ffffff !important;
+        }
+        .floating-chat-button-red[data-redhat-red="true"]:hover {
+          background-color: #CC0000 !important;
+          background: #CC0000 !important;
+        }
+        .floating-chat-button-red[data-redhat-red="true"]:active {
+          background-color: #AA0000 !important;
+          background: #AA0000 !important;
+        }
+      `;
+      document.head.appendChild(style);
+    }
+    return () => {
+      const styleElement = document.getElementById(styleId);
+      if (styleElement) {
+        styleElement.remove();
+      }
+    };
+  }, []);
 
   // Focus input when chat is opened and trigger animation
   useEffect(() => {
@@ -346,35 +390,44 @@ const FloatingChat = () => {
     <>
       {!open && (
         <Box
+          ref={floatingButtonRef}
           onClick={handleOpen}
+          className="floating-chat-button-red"
+          data-redhat-red="true"
           sx={{
             position: 'fixed !important',
             bottom: '24px !important',
             right: '24px !important',
-            zIndex: 9999,
-            width: 56,
-            height: 56,
-            borderRadius: '50%',
-            backgroundColor: `${theme.palette.primary?.main || '#1976d2'} !important`,
+            zIndex: '9999 !important',
+            width: '56px !important',
+            height: '56px !important',
+            borderRadius: '50% !important',
+            backgroundColor: '#EE0000 !important',
+            background: '#EE0000 !important',
             color: '#ffffff !important',
             display: 'flex !important',
-            alignItems: 'center',
-            justifyContent: 'center',
-            cursor: 'pointer',
-            boxShadow: '0px 3px 5px -1px rgba(0,0,0,0.2), 0px 6px 10px 0px rgba(0,0,0,0.14), 0px 1px 18px 0px rgba(0,0,0,0.12)',
-            transition: 'background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+            alignItems: 'center !important',
+            justifyContent: 'center !important',
+            cursor: 'pointer !important',
+            boxShadow: '0px 3px 5px -1px rgba(0,0,0,0.2), 0px 6px 10px 0px rgba(0,0,0,0.14), 0px 1px 18px 0px rgba(0,0,0,0.12) !important',
+            transition: 'background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms !important',
             '&:hover': {
-              backgroundColor: `${theme.palette.primary?.dark || '#115293'} !important`,
+              backgroundColor: '#CC0000 !important',
+              background: '#CC0000 !important',
             },
             '&:active': {
-              boxShadow: '0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,0,0.14), 0px 3px 14px 2px rgba(0,0,0,0.12)',
+              backgroundColor: '#AA0000 !important',
+              background: '#AA0000 !important',
+              boxShadow: '0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,0,0.14), 0px 3px 14px 2px rgba(0,0,0,0.12) !important',
             },
           }}
           style={{
-            backgroundColor: theme.palette.primary?.main || '#1976d2',
+            backgroundColor: '#EE0000',
+            background: '#EE0000',
+            color: '#ffffff',
           }}
         >
-          <ChatBubble />
+          <ChatBubble style={{ color: '#ffffff' }} />
         </Box>
       )}
       {open && (

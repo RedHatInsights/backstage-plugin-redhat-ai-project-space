@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from '@backstage/core-components';
 import { Entity } from '@backstage/catalog-model';
-import { Card, CardContent, Grid, Chip, Typography, Box } from '@material-ui/core';
+import { Card, CardContent, Grid, Chip, Typography, Box, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { getAnnotation } from './utils';
 
@@ -14,10 +14,17 @@ const useStyles = makeStyles((theme) => ({
   },
   titleRow: {
     marginBottom: theme.spacing(1),
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   title: {
     fontSize: '1.1rem',
     fontWeight: 500,
+  },
+  readmeButton: {
+    textTransform: 'none',
+    minWidth: 'auto',
   },
   description: {
     fontSize: '0.875rem',
@@ -106,6 +113,19 @@ export function ProjectCard({ entity }: ProjectCardProps) {
           >
             {entity.metadata.title || entity.metadata.name}
           </Link>
+          <Link
+            to={`/catalog/${entity.metadata.namespace}/${entity.kind.toLowerCase()}/${
+              entity.metadata.name
+            }/readme`}
+          >
+            <Button
+              variant="outlined"
+              size="small"
+              className={classes.readmeButton}
+            >
+              README
+            </Button>
+          </Link>
         </Box>
 
         {/* Description Row */}
@@ -158,7 +178,7 @@ export function ProjectCard({ entity }: ProjectCardProps) {
           <Grid item xs={12} sm={6} md={3}>
             <div className={classes.metadataItem}>
               <Typography className={classes.metadataLabel}>Owner</Typography>
-              <Box display="flex" alignItems="center" gap={1}>
+              <Box display="flex" alignItems="center">
                 <Typography className={classes.ownerName} title={owner}>
                   {owner}
                 </Typography>
