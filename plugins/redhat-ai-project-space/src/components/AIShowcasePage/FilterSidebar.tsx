@@ -8,7 +8,10 @@ import {
   InputLabel,
   Button,
   Box,
+  FormControlLabel,
+  Checkbox,
 } from '@material-ui/core';
+import StarIcon from '@material-ui/icons/Star';
 import { makeStyles } from '@material-ui/core/styles';
 import { Filters, FilterOptions } from './types';
 
@@ -27,6 +30,7 @@ interface FilterSidebarProps {
   filters: Filters;
   filterOptions: FilterOptions;
   onFilterChange: (filterType: keyof Filters, value: string) => void;
+  onFeaturedToggle: (checked: boolean) => void;
   onClearFilters: () => void;
   hasActiveFilters: boolean;
 }
@@ -35,6 +39,7 @@ export function FilterSidebar({
   filters,
   filterOptions,
   onFilterChange,
+  onFeaturedToggle,
   onClearFilters,
   hasActiveFilters,
 }: FilterSidebarProps) {
@@ -73,6 +78,19 @@ export function FilterSidebar({
       <Typography variant="h6" gutterBottom>
         Filters
       </Typography>
+      <FormControlLabel
+        control={
+          <Checkbox
+            checked={filters.featured}
+            onChange={(e) => onFeaturedToggle(e.target.checked)}
+            icon={<StarIcon />}
+            checkedIcon={<StarIcon />}
+            color="primary"
+          />
+        }
+        label="Featured Projects Only"
+      />
+      <Box mb={2} />
       <FilterSection
         label="Category"
         options={filterOptions.categories}

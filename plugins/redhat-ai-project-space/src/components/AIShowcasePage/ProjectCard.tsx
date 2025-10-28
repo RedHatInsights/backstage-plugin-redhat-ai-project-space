@@ -2,8 +2,9 @@ import React from 'react';
 import { Link } from '@backstage/core-components';
 import { Entity } from '@backstage/catalog-model';
 import { Card, CardContent, Grid, Chip, Typography, Box, Button } from '@material-ui/core';
+import StarIcon from '@material-ui/icons/Star';
 import { makeStyles } from '@material-ui/core/styles';
-import { getAnnotation } from './utils';
+import { getAnnotation, isFeatured } from './utils';
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -18,9 +19,18 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  titleContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: theme.spacing(1),
+  },
   title: {
     fontSize: '1.1rem',
     fontWeight: 500,
+  },
+  starIcon: {
+    color: '#FFD700',
+    fontSize: '1.2rem',
   },
   readmeButton: {
     textTransform: 'none',
@@ -99,20 +109,24 @@ export function ProjectCard({ entity }: ProjectCardProps) {
   const status = getAnnotation(entity, 'status');
   const owner = getAnnotation(entity, 'owner');
   const domain = getAnnotation(entity, 'domain');
+  const featured = isFeatured(entity);
 
   return (
     <Card className={classes.card}>
       <CardContent>
         {/* Title Row */}
         <Box className={classes.titleRow}>
-          <Link
-            to={`/catalog/${entity.metadata.namespace}/${entity.kind.toLowerCase()}/${
-              entity.metadata.name
-            }`}
-            className={classes.title}
-          >
-            {entity.metadata.title || entity.metadata.name}
-          </Link>
+          <Box className={classes.titleContainer}>
+            {featured && <StarIcon className={classes.starIcon} />}
+            <Link
+              to={`/catalog/${entity.metadata.namespace}/${entity.kind.toLowerCase()}/${
+                entity.metadata.name
+              }`}
+              className={classes.title}
+            >
+              {entity.metadata.title || entity.metadata.name}
+            </Link>
+          </Box>
           <Link
             to={`/catalog/${entity.metadata.namespace}/${entity.kind.toLowerCase()}/${
               entity.metadata.name

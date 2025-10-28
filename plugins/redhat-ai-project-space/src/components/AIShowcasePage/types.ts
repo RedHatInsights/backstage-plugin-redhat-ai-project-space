@@ -3,6 +3,7 @@ export interface Filters {
   usecase: string;
   status: string;
   domain: string;
+  featured: boolean;
 }
 
 export interface FilterOptions {

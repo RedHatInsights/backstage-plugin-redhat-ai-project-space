@@ -8,6 +8,12 @@ export const getAnnotation = (entity: Entity, key: string): string => {
   return value || '-';
 };
 
+export const isFeatured = (entity: Entity): boolean => {
+  const annotationKey = 'ai.redhat.com/featured';
+  const value = entity.metadata.annotations?.[annotationKey];
+  return value === 'true' || value === true;
+};
+
 /**
  * Fetches all Component entities from the 'ai' namespace and converts them to prose descriptions
  * @param catalogApi - The Backstage Catalog API instance

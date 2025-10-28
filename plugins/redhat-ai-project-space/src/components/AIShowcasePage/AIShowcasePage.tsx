@@ -5,7 +5,7 @@ import { catalogApiRef } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
 import { Grid } from '@material-ui/core';
 import { Filters, FilterOptions } from './types';
-import { getAnnotation, searchFunction } from './utils';
+import { getAnnotation, searchFunction, isFeatured } from './utils';
 import { SidebarContainer } from './SidebarContainer';
 import { ProjectsList } from './ProjectsList';
 import { SearchBar } from './SearchBar';
@@ -22,6 +22,7 @@ export function AIShowcasePage() {
     usecase: '',
     status: '',
     domain: '',
+    featured: false,
   });
 
   useEffect(() => {
@@ -75,6 +76,11 @@ export function AIShowcasePage() {
   // Filter entities based on selected filters and search term
   const filteredEntities = useMemo(() => {
     return entities.filter(entity => {
+      // Apply featured filter
+      if (filters.featured && !isFeatured(entity)) {
+        return false;
+      }
+      
       // Apply dropdown filters
       if (filters.category) {
         const category = getAnnotation(entity, 'category');
@@ -109,16 +115,24 @@ export function AIShowcasePage() {
     }));
   };
 
+  const handleFeaturedToggle = (checked: boolean) => {
+    setFilters(prev => ({
+      ...prev,
+      featured: checked,
+    }));
+  };
+
   const clearFilters = () => {
     setFilters({
       category: '',
       usecase: '',
       status: '',
       domain: '',
+      featured: false,
     });
   };
 
-  const hasActiveFilters = !!(filters.category || filters.usecase || filters.status || filters.domain);
+  const hasActiveFilters = !!(filters.category || filters.usecase || filters.status || filters.domain || filters.featured);
 
   return (
     <Page themeId="tool">
@@ -133,6 +147,7 @@ export function AIShowcasePage() {
                 filters={filters}
                 filterOptions={filterOptions}
                 onFilterChange={handleFilterChange}
+                onFeaturedToggle={handleFeaturedToggle}
                 onClearFilters={clearFilters}
                 hasActiveFilters={hasActiveFilters}
               />
