@@ -11,7 +11,7 @@ export const getAnnotation = (entity: Entity, key: string): string => {
 export const isFeatured = (entity: Entity): boolean => {
   const annotationKey = 'ai.redhat.com/featured';
   const value = entity.metadata.annotations?.[annotationKey];
-  return value === 'true' || value === true;
+  return value === 'true';
 };
 
 /**
@@ -39,6 +39,7 @@ export const buildAIProjectContext = async (catalogApi: CatalogApi): Promise<str
       const owner = getAnnotation(entity, 'owner');
       const domain = getAnnotation(entity, 'domain');
       const status = getAnnotation(entity, 'status');
+      const featured = isFeatured(entity);
       
       // Extract source location from annotations
       const sourceLocation = entity.metadata.annotations?.['backstage.io/source-location'] || 
@@ -51,7 +52,14 @@ export const buildAIProjectContext = async (catalogApi: CatalogApi): Promise<str
         : sourceLocation;
 
       // Build prose description
-      return `${title} is ${description}. It has project tags of ${tags}. It is a ${category} category tool with a ${usecase} use case, owned by ${owner}. It is an ${domain} tool, and ${status}, and its source code location is ${cleanSourceLocation}.`;
+      let proseDescription = `${title} is ${description}. It has project tags of ${tags}. It is a ${category} category tool with a ${usecase} use case, owned by ${owner}. It is an ${domain} tool, and ${status}, and its source code location is ${cleanSourceLocation}.`;
+      
+      // Add featured status if applicable
+      if (featured) {
+        proseDescription += ' This project is marked as featured to raise its visibility and importance.';
+      }
+      
+      return proseDescription;
     });
 
     return proseDescriptions;
