@@ -12,6 +12,7 @@ import {
   Checkbox,
 } from '@material-ui/core';
 import StarIcon from '@material-ui/icons/Star';
+import StarBorderIcon from '@material-ui/icons/StarBorder';
 import { makeStyles } from '@material-ui/core/styles';
 import { Filters, FilterOptions } from './types';
 
@@ -23,6 +24,12 @@ const useStyles = makeStyles((theme) => ({
   filterSection: {
     marginBottom: theme.spacing(2),
     width: '100%',
+  },
+  starIconChecked: {
+    color: '#FFD700',
+  },
+  starIconUnchecked: {
+    color: theme.palette.action.disabled,
   },
 }));
 
@@ -83,9 +90,8 @@ export function FilterSidebar({
           <Checkbox
             checked={filters.featured}
             onChange={(e) => onFeaturedToggle(e.target.checked)}
-            icon={<StarIcon />}
-            checkedIcon={<StarIcon />}
-            color="primary"
+            icon={<StarBorderIcon className={classes.starIconUnchecked} />}
+            checkedIcon={<StarIcon className={classes.starIconChecked} />}
           />
         }
         label="Featured Projects Only"
