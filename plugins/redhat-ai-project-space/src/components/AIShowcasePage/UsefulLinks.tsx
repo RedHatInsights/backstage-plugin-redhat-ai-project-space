@@ -33,7 +33,7 @@ export function UsefulLinks() {
   return (
     <Paper className={classes.linksSidebar}>
       <Typography variant="h6" gutterBottom>
-        AI @ Red Hat
+        AI Resources
       </Typography>
       <Divider style={{ marginBottom: 16 }} />
       {usefulLinks.map((link) => (

@@ -16,6 +16,7 @@ interface SidebarContainerProps {
   filterOptions: FilterOptions;
   onFilterChange: (filterType: keyof Filters, value: string) => void;
   onFeaturedToggle: (checked: boolean) => void;
+  onTagsChange: (tags: string[]) => void;
   onClearFilters: () => void;
   hasActiveFilters: boolean;
 }
@@ -25,6 +26,7 @@ export function SidebarContainer({
   filterOptions,
   onFilterChange,
   onFeaturedToggle,
+  onTagsChange,
   onClearFilters,
   hasActiveFilters,
 }: SidebarContainerProps) {
@@ -37,6 +39,7 @@ export function SidebarContainer({
         filterOptions={filterOptions}
         onFilterChange={onFilterChange}
         onFeaturedToggle={onFeaturedToggle}
+        onTagsChange={onTagsChange}
         onClearFilters={onClearFilters}
         hasActiveFilters={hasActiveFilters}
       />

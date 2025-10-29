@@ -23,6 +23,7 @@ export function AIShowcasePage() {
     status: '',
     domain: '',
     featured: false,
+    tags: [],
   });
 
   useEffect(() => {
@@ -52,6 +53,7 @@ export function AIShowcasePage() {
     const usecases = new Set<string>();
     const statuses = new Set<string>();
     const domains = new Set<string>();
+    const tags = new Set<string>();
 
     entities.forEach(entity => {
       const category = getAnnotation(entity, 'category');
@@ -63,6 +65,11 @@ export function AIShowcasePage() {
       if (usecase !== '-') usecases.add(usecase);
       if (status !== '-') statuses.add(status);
       if (domain !== '-') domains.add(domain);
+      
+      // Extract tags from entity metadata
+      if (entity.metadata.tags) {
+        entity.metadata.tags.forEach(tag => tags.add(tag));
+      }
     });
 
     return {
@@ -70,6 +77,7 @@ export function AIShowcasePage() {
       usecases: Array.from(usecases).sort(),
       statuses: Array.from(statuses).sort(),
       domains: Array.from(domains).sort(),
+      tags: Array.from(tags).sort(),
     };
   }, [entities]);
 
@@ -99,6 +107,15 @@ export function AIShowcasePage() {
         if (domain !== filters.domain) return false;
       }
       
+      // Apply tag filter (additive - show entities with ANY of the selected tags)
+      if (filters.tags.length > 0) {
+        const entityTags = entity.metadata.tags || [];
+        const hasMatchingTag = filters.tags.some(selectedTag => 
+          entityTags.includes(selectedTag)
+        );
+        if (!hasMatchingTag) return false;
+      }
+      
       // Apply search filter
       if (searchTerm && !searchFunction(entity, searchTerm)) {
         return false;
@@ -122,6 +139,13 @@ export function AIShowcasePage() {
     }));
   };
 
+  const handleTagsChange = (tags: string[]) => {
+    setFilters(prev => ({
+      ...prev,
+      tags,
+    }));
+  };
+
   const clearFilters = () => {
     setFilters({
       category: '',
@@ -129,10 +153,11 @@ export function AIShowcasePage() {
       status: '',
       domain: '',
       featured: false,
+      tags: [],
     });
   };
 
-  const hasActiveFilters = !!(filters.category || filters.usecase || filters.status || filters.domain || filters.featured);
+  const hasActiveFilters = !!(filters.category || filters.usecase || filters.status || filters.domain || filters.featured || filters.tags.length > 0);
 
   return (
     <Page themeId="tool">
@@ -148,6 +173,7 @@ export function AIShowcasePage() {
                 filterOptions={filterOptions}
                 onFilterChange={handleFilterChange}
                 onFeaturedToggle={handleFeaturedToggle}
+                onTagsChange={handleTagsChange}
                 onClearFilters={clearFilters}
                 hasActiveFilters={hasActiveFilters}
               />
