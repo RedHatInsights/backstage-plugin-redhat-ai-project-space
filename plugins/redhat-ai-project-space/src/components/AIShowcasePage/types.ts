@@ -4,6 +4,7 @@ export interface Filters {
   status: string;
   domain: string;
   featured: boolean;
+  tags: string[];
 }
 
 export interface FilterOptions {
@@ -11,6 +12,7 @@ export interface FilterOptions {
   usecases: string[];
   statuses: string[];
   domains: string[];
+  tags: string[];
 }
 
 export interface UsefulLink {

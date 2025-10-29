@@ -5,7 +5,6 @@ import {
   Typography,
   Select,
   MenuItem,
-  InputLabel,
   Button,
   Box,
   FormControlLabel,
@@ -15,6 +14,7 @@ import StarIcon from '@material-ui/icons/Star';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 import { makeStyles } from '@material-ui/core/styles';
 import { Filters, FilterOptions } from './types';
+import { TagFilter } from './TagFilter';
 
 const useStyles = makeStyles((theme) => ({
   filterSidebar: {
@@ -25,11 +25,19 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(2),
     width: '100%',
   },
+  filterLabel: {
+    marginBottom: theme.spacing(0.5),
+    fontWeight: 500,
+  },
   starIconChecked: {
     color: '#FFD700',
   },
   starIconUnchecked: {
     color: theme.palette.action.disabled,
+  },
+  placeholderText: {
+    color: theme.palette.text.disabled,
+    fontStyle: 'normal',
   },
 }));
 
@@ -38,6 +46,7 @@ interface FilterSidebarProps {
   filterOptions: FilterOptions;
   onFilterChange: (filterType: keyof Filters, value: string) => void;
   onFeaturedToggle: (checked: boolean) => void;
+  onTagsChange: (tags: string[]) => void;
   onClearFilters: () => void;
   hasActiveFilters: boolean;
 }
@@ -47,6 +56,7 @@ export function FilterSidebar({
   filterOptions,
   onFilterChange,
   onFeaturedToggle,
+  onTagsChange,
   onClearFilters,
   hasActiveFilters,
 }: FilterSidebarProps) {
@@ -61,23 +71,33 @@ export function FilterSidebar({
     options: string[];
     filterType: keyof Filters;
   }) => (
-    <FormControl className={classes.filterSection} variant="outlined" size="small">
-      <InputLabel>{label}</InputLabel>
-      <Select
-        value={filters[filterType]}
-        onChange={(e) => onFilterChange(filterType, e.target.value as string)}
-        label={label}
-      >
-        <MenuItem value="">
-          <em>All</em>
-        </MenuItem>
-        {options.map(option => (
-          <MenuItem key={option} value={option}>
-            {option}
+    <Box className={classes.filterSection}>
+      <Typography variant="body2" className={classes.filterLabel}>
+        {label}
+      </Typography>
+      <FormControl variant="outlined" size="small" fullWidth>
+        <Select
+          value={filters[filterType]}
+          onChange={(e) => onFilterChange(filterType, e.target.value as string)}
+          displayEmpty
+          renderValue={(value) => {
+            if (!value || value === '') {
+              return <span className={classes.placeholderText}>Showing all</span>;
+            }
+            return <span>{value as string}</span>;
+          }}
+        >
+          <MenuItem value="">
+            <em>All</em>
           </MenuItem>
-        ))}
-      </Select>
-    </FormControl>
+          {options.map(option => (
+            <MenuItem key={option} value={option}>
+              {option}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </Box>
   );
 
   return (
@@ -116,6 +136,11 @@ export function FilterSidebar({
         label="Domain"
         options={filterOptions.domains}
         filterType="domain"
+      />
+      <TagFilter
+        availableTags={filterOptions.tags}
+        selectedTags={filters.tags}
+        onTagsChange={onTagsChange}
       />
       <Box display="flex" justifyContent="flex-end" mt={2}>
         <Button
