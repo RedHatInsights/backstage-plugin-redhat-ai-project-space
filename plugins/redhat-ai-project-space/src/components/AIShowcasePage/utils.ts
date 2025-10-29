@@ -99,20 +99,20 @@ export const searchFunction = (entity: Entity, searchTerm: string): boolean => {
 
 export const usefulLinks: UsefulLink[] = [
   {
-    title: 'Artificial Intelligence Skills Academy',
-    url: 'https://source.redhat.com/career/start_learning/skills/artificial_intelligence',
+    title: 'Ansible Lightspeed',
+    url: 'https://www.redhat.com/en/technologies/management/ansible/ansible-lightspeed',
   },
   {
     title: 'Approved AI Tools',
     url: 'https://source.redhat.com/projects_and_programs/ai/ai_tools_and_use_cases',
   },
   {
-    title: 'Internal AI News Room',
-    url: 'https://source.redhat.com/projects_and_programs/ai/newsroom',
+    title: 'Artificial Intelligence Skills Academy',
+    url: 'https://source.redhat.com/career/start_learning/skills/artificial_intelligence',
   },
   {
-    title: 'Sharing AI Community Blog',
-    url: 'https://source.redhat.com/projects_and_programs/ai/share_ai',
+    title: 'Internal AI News Room',
+    url: 'https://source.redhat.com/projects_and_programs/ai/newsroom',
   },
   {
     title: 'OpenShift AI',
@@ -123,8 +123,12 @@ export const usefulLinks: UsefulLink[] = [
     url: 'https://www.redhat.com/en/products/ai/enterprise-linux-ai',
   },
   {
-    title: 'Ansible Lightspeed',
-    url: 'https://www.redhat.com/en/technologies/management/ansible/ansible-lightspeed',
+    title: 'RHEL Lightspeed',
+    url: 'https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux-10/lightspeed',
+  },
+  {
+    title: 'Sharing AI Community Blog',
+    url: 'https://source.redhat.com/projects_and_programs/ai/share_ai',
   },
 ];
 
