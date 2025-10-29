@@ -53,7 +53,7 @@ export function ProjectsList({ entities }: ProjectsListProps) {
             color="primary"
             className={classes.helpButton}
             startIcon={<HelpIcon />}
-            href="/docs/default/component/inscope-onboarding-guide/ai-projects.md"
+            href="/docs/default/component/inscope-onboarding-guide/ai-projects"
             target="_blank"
             rel="noopener noreferrer"
           >
