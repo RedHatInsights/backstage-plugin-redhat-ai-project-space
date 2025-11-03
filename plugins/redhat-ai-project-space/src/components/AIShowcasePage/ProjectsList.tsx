@@ -4,6 +4,7 @@ import { Button, Box, Typography, Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import HelpIcon from '@material-ui/icons/Help';
+import FeedbackIcon from '@material-ui/icons/Feedback';
 import { ProjectCard } from './ProjectCard';
 
 const useStyles = makeStyles((theme) => ({
@@ -25,6 +26,9 @@ const useStyles = makeStyles((theme) => ({
     textTransform: 'none',
   },
   helpButton: {
+    textTransform: 'none',
+  },
+  feedbackButton: {
     textTransform: 'none',
   },
   emptyState: {
@@ -62,12 +66,24 @@ export function ProjectsList({ entities }: ProjectsListProps) {
           <Button
             variant="contained"
             color="primary"
+            className={classes.feedbackButton}
+            startIcon={<FeedbackIcon />}
+            href="https://issues.redhat.com/browse/RHCLOUD-43194"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Feedback
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
             className={classes.addProjectButton}
             startIcon={<AddIcon />}
             href="/create/templates/ai/add-new-ai-project"
           >
             Add New Project
           </Button>
+
         </Box>
       </Box>
       {entities.length === 0 ? (
