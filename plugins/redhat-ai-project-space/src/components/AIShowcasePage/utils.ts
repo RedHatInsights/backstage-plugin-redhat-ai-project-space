@@ -130,5 +130,9 @@ export const usefulLinks: UsefulLink[] = [
     title: 'Sharing AI Community Blog',
     url: 'https://source.redhat.com/projects_and_programs/ai/share_ai',
   },
+  {
+    title: 'inScope Onboarding Guide',
+    url: '/docs/default/component/inscope-onboarding-guide/docs/',
+  }
 ];
 
