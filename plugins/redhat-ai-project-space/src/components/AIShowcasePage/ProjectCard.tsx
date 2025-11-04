@@ -5,6 +5,8 @@ import { Card, CardContent, Grid, Chip, Typography, Box, Button } from '@materia
 import StarIcon from '@material-ui/icons/Star';
 import { makeStyles } from '@material-ui/core/styles';
 import { getAnnotation, isFeatured } from './utils';
+import { VoteButtons } from './VoteButtons';
+import { VoteRatio } from '../../api/ProjectVotesApi';
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -81,6 +83,11 @@ const useStyles = makeStyles((theme) => ({
   statusChipContainer: {
     display: 'inline-flex',
   },
+  voteContainer: {
+    marginTop: theme.spacing(2),
+    paddingTop: theme.spacing(2),
+    borderTop: `1px solid ${theme.palette.divider}`,
+  },
   internalProjectChip: {
     backgroundColor: '#4caf50',
     color: '#fff',
@@ -99,9 +106,11 @@ const useStyles = makeStyles((theme) => ({
 
 interface ProjectCardProps {
   entity: Entity;
+  votes?: VoteRatio;
+  onVoteChange?: (votes: VoteRatio) => void;
 }
 
-export function ProjectCard({ entity }: ProjectCardProps) {
+export function ProjectCard({ entity, votes, onVoteChange }: ProjectCardProps) {
   const classes = useStyles();
 
   const category = getAnnotation(entity, 'category');
@@ -110,6 +119,9 @@ export function ProjectCard({ entity }: ProjectCardProps) {
   const owner = getAnnotation(entity, 'owner');
   const domain = getAnnotation(entity, 'domain');
   const featured = isFeatured(entity);
+  
+  // Generate a unique project ID from the entity
+  const projectId = `${entity.metadata.namespace}/${entity.kind.toLowerCase()}/${entity.metadata.name}`;
 
   return (
     <Card className={classes.card}>
@@ -214,6 +226,15 @@ export function ProjectCard({ entity }: ProjectCardProps) {
             </div>
           </Grid>
         </Grid>
+
+        {/* Vote Buttons */}
+        <Box className={classes.voteContainer}>
+          <VoteButtons 
+            projectId={projectId} 
+            initialVotes={votes}
+            onVoteChange={onVoteChange}
+          />
+        </Box>
       </CardContent>
     </Card>
   );

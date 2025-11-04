@@ -38,4 +38,7 @@ backend.add(import('@backstage/plugin-search-backend/alpha'));
 backend.add(import('@backstage/plugin-search-backend-module-catalog'));
 backend.add(import('@backstage/plugin-search-backend-module-techdocs'));
 
+// redhat-ai-project-space backend plugin
+backend.add(import('backstage-plugin-redhat-ai-project-space-backend'));
+
 backend.start();

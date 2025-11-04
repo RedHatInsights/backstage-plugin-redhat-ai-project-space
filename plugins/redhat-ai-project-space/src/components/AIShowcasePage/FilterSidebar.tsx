@@ -41,6 +41,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+type SortBy = 'alphabetical' | 'votes';
+
 interface FilterSidebarProps {
   filters: Filters;
   filterOptions: FilterOptions;
@@ -49,6 +51,8 @@ interface FilterSidebarProps {
   onTagsChange: (tags: string[]) => void;
   onClearFilters: () => void;
   hasActiveFilters: boolean;
+  sortBy: SortBy;
+  onSortChange: (sortBy: SortBy) => void;
 }
 
 export function FilterSidebar({
@@ -59,6 +63,8 @@ export function FilterSidebar({
   onTagsChange,
   onClearFilters,
   hasActiveFilters,
+  sortBy,
+  onSortChange,
 }: FilterSidebarProps) {
   const classes = useStyles();
 
@@ -103,20 +109,28 @@ export function FilterSidebar({
   return (
     <Paper className={classes.filterSidebar}>
       <Typography variant="h6" gutterBottom>
-        Filters
+        Filter & Sort
       </Typography>
-      <FormControlLabel
-        control={
-          <Checkbox
-            checked={filters.featured}
-            onChange={(e) => onFeaturedToggle(e.target.checked)}
-            icon={<StarBorderIcon className={classes.starIconUnchecked} />}
-            checkedIcon={<StarIcon className={classes.starIconChecked} />}
-          />
-        }
-        label="Featured Projects Only"
-      />
-      <Box mb={2} />
+      
+      {/* Sort Section */}
+      <Box className={classes.filterSection}>
+        <Typography variant="body2" className={classes.filterLabel}>
+          Sort By
+        </Typography>
+        <FormControl variant="outlined" size="small" fullWidth>
+          <Select
+            value={sortBy}
+            onChange={(e) => onSortChange(e.target.value as SortBy)}
+            displayEmpty
+          >
+            <MenuItem value="alphabetical">Name (A-Z)</MenuItem>
+            <MenuItem value="votes">Most Popular</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
+      
+      <Box mb={1} />
+      
       <FilterSection
         label="Category"
         options={filterOptions.categories}
@@ -142,6 +156,21 @@ export function FilterSidebar({
         selectedTags={filters.tags}
         onTagsChange={onTagsChange}
       />
+      
+      <Box mb={2} />
+      
+      <FormControlLabel
+        control={
+          <Checkbox
+            checked={filters.featured}
+            onChange={(e) => onFeaturedToggle(e.target.checked)}
+            icon={<StarBorderIcon className={classes.starIconUnchecked} />}
+            checkedIcon={<StarIcon className={classes.starIconChecked} />}
+          />
+        }
+        label="Featured Projects Only"
+      />
+      
       <Box display="flex" justifyContent="flex-end" mt={2}>
         <Button
           variant="contained"
