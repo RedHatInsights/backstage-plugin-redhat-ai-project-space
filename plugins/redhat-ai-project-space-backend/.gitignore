@@ -1,0 +1,8 @@
+dist
+dist-types
+dist-dynamic
+node_modules
+.vscode
+*.tsbuildinfo
+yarn-install.log
+

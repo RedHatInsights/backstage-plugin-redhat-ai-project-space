@@ -1,0 +1,11 @@
+dynamicPlugins:
+  backend:
+    backstage-plugin-redhat-ai-project-space-backend:
+      appConfig:
+        dynamicPlugins:
+          backend:
+            backstage-plugin-redhat-ai-project-space-backend:
+              dynamicRoutes:
+                - path: /api/redhat-ai-project-space-backend
+                  module: ./dist/index.cjs.js
+

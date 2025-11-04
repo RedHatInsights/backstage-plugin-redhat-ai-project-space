@@ -11,6 +11,8 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+type SortBy = 'alphabetical' | 'votes';
+
 interface SidebarContainerProps {
   filters: Filters;
   filterOptions: FilterOptions;
@@ -19,6 +21,8 @@ interface SidebarContainerProps {
   onTagsChange: (tags: string[]) => void;
   onClearFilters: () => void;
   hasActiveFilters: boolean;
+  sortBy: SortBy;
+  onSortChange: (sortBy: SortBy) => void;
 }
 
 export function SidebarContainer({
@@ -29,6 +33,8 @@ export function SidebarContainer({
   onTagsChange,
   onClearFilters,
   hasActiveFilters,
+  sortBy,
+  onSortChange,
 }: SidebarContainerProps) {
   const classes = useStyles();
 
@@ -42,6 +48,8 @@ export function SidebarContainer({
         onTagsChange={onTagsChange}
         onClearFilters={onClearFilters}
         hasActiveFilters={hasActiveFilters}
+        sortBy={sortBy}
+        onSortChange={onSortChange}
       />
       <UsefulLinks />
     </Box>

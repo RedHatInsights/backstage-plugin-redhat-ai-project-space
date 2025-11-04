@@ -11,12 +11,15 @@ import { ProjectsList } from './ProjectsList';
 import { SearchBar } from './SearchBar';
 import FloatingChat from './FloatingChat';
 
+type SortBy = 'alphabetical' | 'votes';
+
 export function AIShowcasePage() {
   const catalogApi = useApi(catalogApiRef);
   const [entities, setEntities] = useState<Entity[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | undefined>();
   const [searchTerm, setSearchTerm] = useState('');
+  const [sortBy, setSortBy] = useState<SortBy>('alphabetical');
   const [filters, setFilters] = useState<Filters>({
     category: '',
     usecase: '',
@@ -176,11 +179,13 @@ export function AIShowcasePage() {
                 onTagsChange={handleTagsChange}
                 onClearFilters={clearFilters}
                 hasActiveFilters={hasActiveFilters}
+                sortBy={sortBy}
+                onSortChange={setSortBy}
               />
             </Grid>
             <Grid item xs={12} md={9}>
               <SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} />
-              <ProjectsList entities={filteredEntities} />
+              <ProjectsList entities={filteredEntities} sortBy={sortBy} />
             </Grid>
           </Grid>
         )}
