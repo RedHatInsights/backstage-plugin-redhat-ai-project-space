@@ -55,4 +55,3 @@ After updating backstage I recommend you attempt building all plugins with `make
 
 ### Build the Dynamic Plugin
 Run `make build-plugin` - the plugin tarballs will appear under `builds/`. There will be a directory for each plugin, and 2 files for each: the plugin tarball and a text file with the integrity SHA.
-
