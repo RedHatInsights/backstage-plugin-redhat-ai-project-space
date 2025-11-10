@@ -34,6 +34,11 @@ Here's an example of how to configure the plugin in your dynamic plugins config 
 > [!NOTE]
 > `sqlite` dependencies for local dev require python 3.11 or higher. You can use a global python manager like `pyenv`. Python is **not** required for running in RHDH.
 
+To set up your local development environment, copy the `catalog_default` directory to `catalog`. The plugin is configured to load entity files from the `catalog` directory. This structure separates your local development work from the repository, ensuring that experimental or temporary changes are not accidentally committed to version control.
+```sh
+cp -r catalog_default catalog
+```
+
 To start the app, run:
 
 ```sh
