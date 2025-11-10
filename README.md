@@ -31,6 +31,9 @@ Here's an example of how to configure the plugin in your dynamic plugins config 
                   text: AI Showcase
 ```
 ## Development
+> [!NOTE]
+> `sqlite` dependencies for local dev require python 3.11 or higher. You can use a global python manager like `pyenv`. Python is **not** required for running in RHDH.
+
 To start the app, run:
 
 ```sh
