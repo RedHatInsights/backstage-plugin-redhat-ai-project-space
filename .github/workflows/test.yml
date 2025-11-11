@@ -22,5 +22,8 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
-      - name: Run tests
-        run: yarn workspace @redhatinsights/backstage-plugin-visual-qontract test
+      - name: Run frontend plugin tests
+        run: yarn workspace backstage-plugin-redhat-ai-project-space test
+
+      - name: Run backend plugin tests
+        run: yarn workspace backstage-plugin-redhat-ai-project-space-backend test

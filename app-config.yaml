@@ -90,4 +90,4 @@ catalog:
     - allow: [Component, System, Domain, User, Group, Resource, Location, Template, API]
   locations:
     - type: file
-      target: ../../catalog_default/all.yaml
+      target: ../../catalog/all.yaml
