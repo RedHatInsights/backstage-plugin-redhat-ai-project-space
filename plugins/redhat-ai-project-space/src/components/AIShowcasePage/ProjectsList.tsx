@@ -116,7 +116,7 @@ export function ProjectsList({ entities, sortBy }: ProjectsListProps) {
             color="primary"
             className={classes.feedbackButton}
             startIcon={<FeedbackIcon />}
-            href="https://issues.redhat.com/browse/RHCLOUD-43194"
+            href="https://issues.redhat.com/browse/RHCLOUD-43344"
             target="_blank"
             rel="noopener noreferrer"
           >
