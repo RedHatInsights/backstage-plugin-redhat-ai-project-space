@@ -6,6 +6,7 @@ export interface VoteRatio {
   downvotes: number;
   ratio: number;
   total: number;
+  userVote?: 'upvote' | 'downvote' | null;
 }
 
 export interface ProjectVotesApi {
