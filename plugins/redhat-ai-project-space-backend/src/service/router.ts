@@ -3,11 +3,12 @@ import express from 'express';
 import Router from 'express-promise-router';
 import { z } from 'zod';
 import { DatabaseHandler } from '../database/DatabaseHandler';
-import { LoggerService } from '@backstage/backend-plugin-api';
+import { LoggerService, HttpAuthService } from '@backstage/backend-plugin-api';
 
 export interface RouterOptions {
   logger: LoggerService;
   database: DatabaseHandler;
+  httpAuth: HttpAuthService;
 }
 
 // Schema validation
@@ -18,7 +19,7 @@ const ProjectIdSchema = z.object({
 export async function createRouter(
   options: RouterOptions,
 ): Promise<express.Router> {
-  const { logger, database } = options;
+  const { logger, database, httpAuth } = options;
 
   const router = Router();
   router.use(express.json());
@@ -51,8 +52,17 @@ export async function createRouter(
         projectId: request.params.projectId,
       });
 
-      logger.info(`Getting vote ratio for project: ${projectId}`);
-      const voteRatio = await database.getVoteRatio(projectId);
+      // Extract user identity (optional for GET requests)
+      let userRef: string | undefined;
+      try {
+        const credentials = await httpAuth.credentials(request);
+        userRef = credentials.principal.userEntityRef;
+      } catch {
+        // User not authenticated, continue without user context
+      }
+
+      logger.info(`Getting vote ratio for project: ${projectId}${userRef ? ` (user: ${userRef})` : ''}`);
+      const voteRatio = await database.getVoteRatio(projectId, userRef);
 
       response.json(voteRatio);
     } catch (error) {
@@ -77,8 +87,19 @@ export async function createRouter(
         projectId: request.params.projectId,
       });
 
-      logger.info(`Upvoting project: ${projectId}`);
-      const voteRatio = await database.upvoteProject(projectId);
+      // Extract user identity (required for voting)
+      const credentials = await httpAuth.credentials(request);
+      const userRef = credentials.principal.userEntityRef;
+
+      if (!userRef) {
+        response.status(401).json({
+          error: 'User authentication required',
+        });
+        return;
+      }
+
+      logger.info(`User ${userRef} upvoting project: ${projectId}`);
+      const voteRatio = await database.upvoteProject(projectId, userRef);
 
       response.json(voteRatio);
     } catch (error) {
@@ -103,8 +124,19 @@ export async function createRouter(
         projectId: request.params.projectId,
       });
 
-      logger.info(`Downvoting project: ${projectId}`);
-      const voteRatio = await database.downvoteProject(projectId);
+      // Extract user identity (required for voting)
+      const credentials = await httpAuth.credentials(request);
+      const userRef = credentials.principal.userEntityRef;
+
+      if (!userRef) {
+        response.status(401).json({
+          error: 'User authentication required',
+        });
+        return;
+      }
+
+      logger.info(`User ${userRef} downvoting project: ${projectId}`);
+      const voteRatio = await database.downvoteProject(projectId, userRef);
 
       response.json(voteRatio);
     } catch (error) {

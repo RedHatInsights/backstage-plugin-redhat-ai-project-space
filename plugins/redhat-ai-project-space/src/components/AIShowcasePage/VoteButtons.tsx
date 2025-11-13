@@ -31,8 +31,22 @@ const useStyles = makeStyles((theme) => ({
   upvoteButton: {
     color: theme.palette.success.main,
   },
+  upvoteButtonActive: {
+    color: theme.palette.success.main,
+    backgroundColor: theme.palette.action.selected,
+    '&:hover': {
+      backgroundColor: theme.palette.action.selected,
+    },
+  },
   downvoteButton: {
     color: theme.palette.error.main,
+  },
+  downvoteButtonActive: {
+    color: theme.palette.error.main,
+    backgroundColor: theme.palette.action.selected,
+    '&:hover': {
+      backgroundColor: theme.palette.action.selected,
+    },
   },
   count: {
     fontSize: '0.875rem',
@@ -116,6 +130,15 @@ export const VoteButtons = ({ projectId, initialVotes, onVoteChange }: VoteButto
   const downvotes = votes?.downvotes || 0;
   const ratio = votes?.ratio || 0;
   const percentage = Math.round(ratio * 100);
+  const userVote = votes?.userVote;
+
+  const upvoteButtonClass = userVote === 'upvote' 
+    ? `${classes.iconButton} ${classes.upvoteButtonActive}`
+    : `${classes.iconButton} ${classes.upvoteButton}`;
+
+  const downvoteButtonClass = userVote === 'downvote'
+    ? `${classes.iconButton} ${classes.downvoteButtonActive}`
+    : `${classes.iconButton} ${classes.downvoteButton}`;
 
   return (
     <Box className={classes.container}>
@@ -123,11 +146,11 @@ export const VoteButtons = ({ projectId, initialVotes, onVoteChange }: VoteButto
         <CircularProgress size={20} className={classes.loading} />
       ) : (
         <>
-          <Tooltip title="Upvote this project">
+          <Tooltip title={userVote === 'upvote' ? 'You upvoted this project' : 'Upvote this project'}>
             <IconButton
               size="small"
               onClick={handleUpvote}
-              className={`${classes.iconButton} ${classes.upvoteButton}`}
+              className={upvoteButtonClass}
               aria-label="upvote"
             >
               <ThumbUpIcon fontSize="small" />
@@ -146,11 +169,11 @@ export const VoteButtons = ({ projectId, initialVotes, onVoteChange }: VoteButto
             {downvotes}
           </Typography>
           
-          <Tooltip title="Downvote this project">
+          <Tooltip title={userVote === 'downvote' ? 'You downvoted this project' : 'Downvote this project'}>
             <IconButton
               size="small"
               onClick={handleDownvote}
-              className={`${classes.iconButton} ${classes.downvoteButton}`}
+              className={downvoteButtonClass}
               aria-label="downvote"
             >
               <ThumbDownIcon fontSize="small" />
