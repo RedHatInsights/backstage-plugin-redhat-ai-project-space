@@ -53,27 +53,26 @@ export class DatabaseHandler {
       if (existingVote.vote_type === 'upvote') {
         // User already upvoted, do nothing (could also allow removing vote)
         return this.getVoteRatio(projectId, userRef);
-      } else {
-        // User previously downvoted, change to upvote
-        await this.db.transaction(async trx => {
-          // Update user vote
-          await trx('user_votes')
-            .where({ user_ref: userRef, project_id: projectId })
-            .update({
-              vote_type: 'upvote',
-              updated_at: this.db.fn.now(),
-            });
-
-          // Update aggregate counts: add upvote, remove downvote
-          await trx('project_votes')
-            .where('project_id', projectId)
-            .update({
-              upvotes: this.db.raw('upvotes + 1'),
-              downvotes: this.db.raw('downvotes - 1'),
-              updated_at: this.db.fn.now(),
-            });
-        });
       }
+      // User previously downvoted, change to upvote
+      await this.db.transaction(async trx => {
+        // Update user vote
+        await trx('user_votes')
+          .where({ user_ref: userRef, project_id: projectId })
+          .update({
+            vote_type: 'upvote',
+            updated_at: this.db.fn.now(),
+          });
+
+        // Update aggregate counts: add upvote, remove downvote
+        await trx('project_votes')
+          .where('project_id', projectId)
+          .update({
+            upvotes: this.db.raw('upvotes + 1'),
+            downvotes: this.db.raw('downvotes - 1'),
+            updated_at: this.db.fn.now(),
+          });
+      });
     } else {
       // New vote
       await this.db.transaction(async trx => {
@@ -116,27 +115,26 @@ export class DatabaseHandler {
       if (existingVote.vote_type === 'downvote') {
         // User already downvoted, do nothing (could also allow removing vote)
         return this.getVoteRatio(projectId, userRef);
-      } else {
-        // User previously upvoted, change to downvote
-        await this.db.transaction(async trx => {
-          // Update user vote
-          await trx('user_votes')
-            .where({ user_ref: userRef, project_id: projectId })
-            .update({
-              vote_type: 'downvote',
-              updated_at: this.db.fn.now(),
-            });
-
-          // Update aggregate counts: add downvote, remove upvote
-          await trx('project_votes')
-            .where('project_id', projectId)
-            .update({
-              upvotes: this.db.raw('upvotes - 1'),
-              downvotes: this.db.raw('downvotes + 1'),
-              updated_at: this.db.fn.now(),
-            });
-        });
       }
+      // User previously upvoted, change to downvote
+      await this.db.transaction(async trx => {
+        // Update user vote
+        await trx('user_votes')
+          .where({ user_ref: userRef, project_id: projectId })
+          .update({
+            vote_type: 'downvote',
+            updated_at: this.db.fn.now(),
+          });
+
+        // Update aggregate counts: add downvote, remove upvote
+        await trx('project_votes')
+          .where('project_id', projectId)
+          .update({
+            upvotes: this.db.raw('upvotes - 1'),
+            downvotes: this.db.raw('downvotes + 1'),
+            updated_at: this.db.fn.now(),
+          });
+      });
     } else {
       // New vote
       await this.db.transaction(async trx => {
