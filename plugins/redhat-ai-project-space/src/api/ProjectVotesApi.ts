@@ -68,26 +68,14 @@ export class ProjectVotesClient implements ProjectVotesApi {
   }
 
   async getAllVotes(): Promise<VoteRatio[]> {
-    try {
-      const baseUrl = await this.discoveryApi.getBaseUrl('redhat-ai-project-space-backend');
-      console.log('[ProjectVotesApi] Fetching all votes from:', `${baseUrl}/votes`);
-      const response = await this.fetchApi.fetch(`${baseUrl}/votes`);
-      
-      console.log('[ProjectVotesApi] Response status:', response.status, response.statusText);
-      
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('[ProjectVotesApi] Error response:', errorText);
-        throw new Error(`Failed to get all votes: ${response.status} ${response.statusText}`);
-      }
-      
-      const data = await response.json();
-      console.log('[ProjectVotesApi] Received votes data:', data);
-      return data;
-    } catch (error) {
-      console.error('[ProjectVotesApi] Exception in getAllVotes:', error);
-      throw error;
+    const baseUrl = await this.discoveryApi.getBaseUrl('redhat-ai-project-space-backend');
+    const response = await this.fetchApi.fetch(`${baseUrl}/votes`);
+
+    if (!response.ok) {
+      throw new Error(`Failed to get all votes: ${response.status} ${response.statusText}`);
     }
+
+    return response.json();
   }
 }
 
