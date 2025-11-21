@@ -9,6 +9,7 @@ import { getAnnotation, searchFunction, isFeatured } from './utils';
 import { SidebarContainer } from './SidebarContainer';
 import { ProjectsList } from './ProjectsList';
 import { SearchBar } from './SearchBar';
+import { DisclaimerAlert } from './DisclaimerAlert';
 import FloatingChat from './FloatingChat';
 
 type SortBy = 'alphabetical' | 'votes';
@@ -169,25 +170,28 @@ export function AIShowcasePage() {
         {loading && <Progress />}
         {error && <div>Error: {error}</div>}
         {!loading && !error && (
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={3}>
-              <SidebarContainer
-                filters={filters}
-                filterOptions={filterOptions}
-                onFilterChange={handleFilterChange}
-                onFeaturedToggle={handleFeaturedToggle}
-                onTagsChange={handleTagsChange}
-                onClearFilters={clearFilters}
-                hasActiveFilters={hasActiveFilters}
-                sortBy={sortBy}
-                onSortChange={setSortBy}
-              />
+          <>
+            <DisclaimerAlert />
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={3}>
+                <SidebarContainer
+                  filters={filters}
+                  filterOptions={filterOptions}
+                  onFilterChange={handleFilterChange}
+                  onFeaturedToggle={handleFeaturedToggle}
+                  onTagsChange={handleTagsChange}
+                  onClearFilters={clearFilters}
+                  hasActiveFilters={hasActiveFilters}
+                  sortBy={sortBy}
+                  onSortChange={setSortBy}
+                />
+              </Grid>
+              <Grid item xs={12} md={9}>
+                <SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} />
+                <ProjectsList entities={filteredEntities} sortBy={sortBy} />
+              </Grid>
             </Grid>
-            <Grid item xs={12} md={9}>
-              <SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} />
-              <ProjectsList entities={filteredEntities} sortBy={sortBy} />
-            </Grid>
-          </Grid>
+          </>
         )}
       </Content>
       <FloatingChat />
