@@ -123,6 +123,10 @@ export const usefulLinks: UsefulLink[] = [
     url: 'https://www.redhat.com/en/products/ai/enterprise-linux-ai',
   },
   {
+    title: 'Developer Lightspeed for RHDH',
+    url: 'https://developers.redhat.com/products/rhdh/developer-lightspeed',
+  },
+  {
     title: 'RHEL Lightspeed',
     url: 'https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux-10/lightspeed',
   },
