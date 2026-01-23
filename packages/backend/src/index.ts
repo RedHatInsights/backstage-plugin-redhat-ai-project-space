@@ -10,9 +10,12 @@ import { createBackend } from '@backstage/backend-defaults';
 
 const backend = createBackend();
 
-backend.add(import('@backstage/plugin-app-backend/alpha'));
-backend.add(import('@backstage/plugin-proxy-backend/alpha'));
-backend.add(import('@backstage/plugin-scaffolder-backend/alpha'));
+backend.add(import('@backstage/plugin-app-backend'));
+backend.add(import('@backstage/plugin-proxy-backend'));
+
+// scaffolder plugin - must be added before catalog to provide actionsRegistry
+backend.add(import('@backstage/plugin-scaffolder-backend'));
+
 backend.add(import('@backstage/plugin-techdocs-backend/alpha'));
 
 // auth plugin
@@ -21,11 +24,13 @@ backend.add(import('@backstage/plugin-auth-backend'));
 backend.add(import('@backstage/plugin-auth-backend-module-guest-provider'));
 // See https://github.com/backstage/backstage/blob/master/docs/auth/guest/provider.md
 
-// catalog plugin
-backend.add(import('@backstage/plugin-catalog-backend/alpha'));
+// catalog module - must be added before catalog plugin to extend it
 backend.add(
   import('@backstage/plugin-catalog-backend-module-scaffolder-entity-model'),
 );
+
+// catalog plugin
+backend.add(import('@backstage/plugin-catalog-backend'));
 
 // permission plugin
 backend.add(import('@backstage/plugin-permission-backend/alpha'));
