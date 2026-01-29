@@ -1,11 +1,9 @@
-import React, { PropsWithChildren } from 'react';
+import { PropsWithChildren } from 'react';
 import { makeStyles } from '@material-ui/core';
 import HomeIcon from '@material-ui/icons/Home';
 import AccessAlarm from '@material-ui/icons/AccessAlarm';
 import ExtensionIcon from '@material-ui/icons/Extension';
-import MapIcon from '@material-ui/icons/MyLocation';
 import LibraryBooks from '@material-ui/icons/LibraryBooks';
-import CreateComponentIcon from '@material-ui/icons/AddCircleOutline';
 import FlashOn from '@material-ui/icons/FlashOn';
 import LogoFull from './LogoFull';
 import LogoIcon from './LogoIcon';
@@ -21,8 +19,6 @@ import {
   SidebarGroup,
   SidebarItem,
   SidebarPage,
-  SidebarScrollWrapper,
-  SidebarSpace,
   useSidebarOpenState,
   Link,
   CatalogIcon,
@@ -76,7 +72,7 @@ export const Root = ({ children }: PropsWithChildren<{}>) => (
         <SidebarItem icon={FlashOn} to="ai-showcase" text="AI Showcase" />
         {/* End global nav */}
       </SidebarGroup>
-      <SidebarSpace />
+      <SidebarPage />
       <SidebarDivider />
       <SidebarGroup
         label="Settings"

@@ -15,12 +15,14 @@ export const redhatAiProjectSpacePlugin = createBackendPlugin({
   register(env) {
     env.registerInit({
       deps: {
+        auth: coreServices.auth,
         httpRouter: coreServices.httpRouter,
         logger: coreServices.logger,
         database: coreServices.database,
         httpAuth: coreServices.httpAuth,
+        config: coreServices.rootConfig,
       },
-      async init({ httpRouter, logger, database, httpAuth }) {
+      async init({ auth, httpRouter, logger, database, httpAuth, config }) {
         logger.info('Initializing Red Hat AI Project Space backend plugin');
 
         // Get database client
@@ -31,9 +33,11 @@ export const redhatAiProjectSpacePlugin = createBackendPlugin({
 
         // Create router
         const router = await createRouter({
+          auth,
           logger,
           database: databaseHandler,
           httpAuth,
+          config: config,
         });
 
         // Register the router

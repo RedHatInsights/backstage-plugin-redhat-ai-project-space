@@ -10,6 +10,7 @@
   "compilerOptions": {
     "outDir": "dist-types",
     "rootDir": ".",
+    "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
       "backstage-plugin-redhat-ai-project-space": ["./plugins/redhat-ai-project-space"]

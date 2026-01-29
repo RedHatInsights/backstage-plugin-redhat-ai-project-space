@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { Link } from '@backstage/core-components';
 import { Entity } from '@backstage/catalog-model';
 import { Card, CardContent, Grid, Chip, Typography, Box, Button } from '@material-ui/core';

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Button, Grid } from '@material-ui/core';
 import {
   EntityApiDefinitionCard,
@@ -31,7 +30,7 @@ import {
 import {
   isGithubActionsAvailable,
   EntityGithubActionsContent,
-} from '@backstage/plugin-github-actions';
+} from '@backstage-community/plugin-github-actions';
 import {
   EntityUserProfileCard,
   EntityGroupProfileCard,
