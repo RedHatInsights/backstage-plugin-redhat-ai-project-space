@@ -21,28 +21,27 @@ import {
 import { TechDocsAddons } from '@backstage/plugin-techdocs-react';
 import { ReportIssue } from '@backstage/plugin-techdocs-module-addons-contrib';
 import { UserSettingsPage } from '@backstage/plugin-user-settings';
-import { apis } from './apis';
 import { entityPage } from './components/catalog/EntityPage';
 import { searchPage } from './components/search/SearchPage';
 import { Root } from './components/Root';
 
-import {
-  AlertDisplay,
-  OAuthRequestDialog,
-  SignInPage,
-} from '@backstage/core-components';
-import { createApp } from '@backstage/app-defaults';
+import { createApp } from '@backstage/frontend-defaults';
 import { AppRouter, FlatRoutes } from '@backstage/core-app-api';
+import { convertLegacyAppOptions, convertLegacyAppRoot } from '@backstage/core-compat-api';
 import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
 import { RequirePermission } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
+import appVisualizerPlugin from '@backstage/plugin-app-visualizer';
 
 import {
   AIShowcasePageComponent,
 } from 'backstage-plugin-redhat-ai-project-space';
 
-const app = createApp({
-  apis,
+import { apisModule } from './modules/apis';
+import { authModule } from './modules/auth';
+import { navModule } from './modules/nav';
+
+const bindRoutesModule = convertLegacyAppOptions({
   bindRoutes({ bind }) {
     bind(catalogPlugin.externalRoutes, {
       createComponent: scaffolderPlugin.routes.root,
@@ -59,9 +58,6 @@ const app = createApp({
     bind(orgPlugin.externalRoutes, {
       catalogIndex: catalogPlugin.routes.catalogIndex,
     });
-  },
-  components: {
-    SignInPage: props => <SignInPage {...props} auto providers={['guest']} />,
   },
 });
 
@@ -107,12 +103,21 @@ const routes = (
   </FlatRoutes>
 );
 
-export default app.createRoot(
-  <>
-    <AlertDisplay />
-    <OAuthRequestDialog />
-    <AppRouter>
-      <Root>{routes}</Root>
-    </AppRouter>
-  </>,
+const convertedRootFeatures = convertLegacyAppRoot(
+  <AppRouter>
+    <Root>{routes}</Root>
+  </AppRouter>,
 );
+
+const app = createApp({
+  features: [
+    apisModule,
+    authModule,
+    navModule,
+    bindRoutesModule,
+    appVisualizerPlugin,
+    ...convertedRootFeatures,
+  ],
+});
+
+export default app.createRoot();

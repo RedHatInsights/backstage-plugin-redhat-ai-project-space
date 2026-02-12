@@ -22,6 +22,18 @@
     "prettier:check": "prettier --check .",
     "new": "backstage-cli new"
   },
+  "backstage": {
+    "cli": {
+      "new": {
+        "templates": [
+          "@backstage/cli/templates/new-frontend-plugin",
+          "@backstage/cli/templates/new-frontend-plugin-module",
+          "@backstage/cli/templates/backend-plugin",
+          "@backstage/cli/templates/backend-plugin-module"
+        ]
+      }
+    }
+  },
   "workspaces": {
     "packages": [
       "packages/*",

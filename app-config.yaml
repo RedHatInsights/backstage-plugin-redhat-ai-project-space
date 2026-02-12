@@ -1,6 +1,7 @@
 app:
   title: Scaffolded Backstage App
   baseUrl: http://localhost:3000
+  packages: all
 
 # Web RCA Config
 ocm:
