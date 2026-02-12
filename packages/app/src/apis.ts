@@ -7,7 +7,13 @@ import {
   AnyApiFactory,
   configApiRef,
   createApiFactory,
+  discoveryApiRef,
+  fetchApiRef,
 } from '@backstage/core-plugin-api';
+import {
+  projectVotesApiRef,
+  ProjectVotesClient,
+} from 'backstage-plugin-redhat-ai-project-space';
 
 export const apis: AnyApiFactory[] = [
   createApiFactory({
@@ -16,4 +22,13 @@ export const apis: AnyApiFactory[] = [
     factory: ({ configApi }) => ScmIntegrationsApi.fromConfig(configApi),
   }),
   ScmAuth.createDefaultApiFactory(),
+  createApiFactory({
+    api: projectVotesApiRef,
+    deps: {
+      discoveryApi: discoveryApiRef,
+      fetchApi: fetchApiRef,
+    },
+    factory: ({ discoveryApi, fetchApi }) =>
+      new ProjectVotesClient(discoveryApi, fetchApi),
+  }),
 ];

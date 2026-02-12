@@ -1,0 +1,262 @@
+---
+# AI Chatbot Assistant
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: ai-chatbot-assistant
+  namespace: ai
+  title: AI Chatbot Assistant
+  description: |
+    Intelligent chatbot powered by large language models for customer support automation.
+    Provides natural language understanding and contextual responses.
+  tags:
+    - ai
+    - chatbot
+    - nlp
+    - customer-support
+  annotations:
+    ai-showcase/category: 'Natural Language Processing'
+    ai-showcase/use-case: 'Customer Support'
+    ai-showcase/status: 'Production'
+    ai-showcase/domain: 'Business Applications'
+    ai-showcase/featured: 'true'
+spec:
+  type: service
+  lifecycle: production
+  owner: ai-team
+
+---
+# Computer Vision Quality Inspector
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: cv-quality-inspector
+  namespace: ai
+  title: Computer Vision Quality Inspector
+  description: |
+    Automated visual inspection system using computer vision and deep learning
+    to detect defects in manufacturing processes with 99% accuracy.
+  tags:
+    - ai
+    - computer-vision
+    - manufacturing
+    - quality-control
+  annotations:
+    ai-showcase/category: 'Computer Vision'
+    ai-showcase/use-case: 'Quality Assurance'
+    ai-showcase/status: 'Production'
+    ai-showcase/domain: 'Manufacturing'
+    ai-showcase/featured: 'true'
+spec:
+  type: service
+  lifecycle: production
+  owner: ai-team
+
+---
+# Predictive Maintenance Engine
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: predictive-maintenance
+  namespace: ai
+  title: Predictive Maintenance Engine
+  description: |
+    ML-powered predictive maintenance system that analyzes sensor data to
+    predict equipment failures before they occur, reducing downtime by 40%.
+  tags:
+    - ai
+    - predictive-analytics
+    - iot
+    - maintenance
+  annotations:
+    ai-showcase/category: 'Predictive Analytics'
+    ai-showcase/use-case: 'Asset Management'
+    ai-showcase/status: 'Production'
+    ai-showcase/domain: 'Operations'
+spec:
+  type: service
+  lifecycle: production
+  owner: ai-team
+
+---
+# Fraud Detection System
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: fraud-detection-ai
+  namespace: ai
+  title: Fraud Detection System
+  description: |
+    Real-time fraud detection using anomaly detection algorithms and
+    behavioral analysis to identify suspicious transactions.
+  tags:
+    - ai
+    - fraud-detection
+    - security
+    - fintech
+  annotations:
+    ai-showcase/category: 'Anomaly Detection'
+    ai-showcase/use-case: 'Security'
+    ai-showcase/status: 'Production'
+    ai-showcase/domain: 'Financial Services'
+spec:
+  type: service
+  lifecycle: production
+  owner: ai-team
+
+---
+# Document Intelligence OCR
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: document-intelligence
+  namespace: ai
+  title: Document Intelligence OCR
+  description: |
+    Advanced OCR and document understanding system that extracts structured
+    data from invoices, receipts, and forms with high accuracy.
+  tags:
+    - ai
+    - ocr
+    - document-processing
+    - automation
+  annotations:
+    ai-showcase/category: 'Natural Language Processing'
+    ai-showcase/use-case: 'Document Processing'
+    ai-showcase/status: 'Beta'
+    ai-showcase/domain: 'Business Applications'
+spec:
+  type: service
+  lifecycle: experimental
+  owner: ai-team
+
+---
+# Recommendation Engine
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: ai-recommendation-engine
+  namespace: ai
+  title: Recommendation Engine
+  description: |
+    Personalized recommendation system using collaborative filtering and
+    content-based algorithms to suggest products and content.
+  tags:
+    - ai
+    - recommendations
+    - personalization
+    - e-commerce
+  annotations:
+    ai-showcase/category: 'Recommendation Systems'
+    ai-showcase/use-case: 'Personalization'
+    ai-showcase/status: 'Production'
+    ai-showcase/domain: 'E-commerce'
+spec:
+  type: service
+  lifecycle: production
+  owner: ai-team
+
+---
+# Sentiment Analysis API
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: sentiment-analysis-api
+  namespace: ai
+  title: Sentiment Analysis API
+  description: |
+    Real-time sentiment analysis service that processes customer feedback,
+    reviews, and social media posts to understand customer sentiment.
+  tags:
+    - ai
+    - nlp
+    - sentiment-analysis
+    - customer-insights
+  annotations:
+    ai-showcase/category: 'Natural Language Processing'
+    ai-showcase/use-case: 'Customer Insights'
+    ai-showcase/status: 'Production'
+    ai-showcase/domain: 'Marketing'
+spec:
+  type: service
+  lifecycle: production
+  owner: ai-team
+
+---
+# AI Code Assistant
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: ai-code-assistant
+  namespace: ai
+  title: AI Code Assistant
+  description: |
+    Developer productivity tool that provides intelligent code completion,
+    bug detection, and code review suggestions using transformer models.
+  tags:
+    - ai
+    - code-generation
+    - developer-tools
+    - productivity
+  annotations:
+    ai-showcase/category: 'Code Generation'
+    ai-showcase/use-case: 'Developer Productivity'
+    ai-showcase/status: 'Beta'
+    ai-showcase/domain: 'Software Development'
+    ai-showcase/featured: 'true'
+spec:
+  type: service
+  lifecycle: experimental
+  owner: ai-team
+
+---
+# Time Series Forecasting
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: time-series-forecasting
+  namespace: ai
+  title: Time Series Forecasting
+  description: |
+    Advanced forecasting system for demand planning, sales prediction,
+    and resource optimization using LSTM and Prophet models.
+  tags:
+    - ai
+    - forecasting
+    - time-series
+    - planning
+  annotations:
+    ai-showcase/category: 'Predictive Analytics'
+    ai-showcase/use-case: 'Demand Planning'
+    ai-showcase/status: 'Production'
+    ai-showcase/domain: 'Supply Chain'
+spec:
+  type: service
+  lifecycle: production
+  owner: ai-team
+
+---
+# Voice Assistant Platform
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: voice-assistant-platform
+  namespace: ai
+  title: Voice Assistant Platform
+  description: |
+    Multi-language voice assistant platform with speech recognition,
+    natural language understanding, and text-to-speech capabilities.
+  tags:
+    - ai
+    - voice
+    - speech-recognition
+    - nlp
+  annotations:
+    ai-showcase/category: 'Speech & Audio'
+    ai-showcase/use-case: 'Voice Interfaces'
+    ai-showcase/status: 'Beta'
+    ai-showcase/domain: 'Consumer Applications'
+spec:
+  type: service
+  lifecycle: experimental
+  owner: ai-team
