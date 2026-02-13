@@ -12,7 +12,6 @@ import {
 import { ScaffolderPage, scaffolderPlugin } from '@backstage/plugin-scaffolder';
 import { orgPlugin } from '@backstage/plugin-org';
 import { SearchPage } from '@backstage/plugin-search';
-import { TechRadarPage } from '@backstage-community/plugin-tech-radar';
 import {
   TechDocsIndexPage,
   techdocsPlugin,
@@ -36,10 +35,9 @@ import { AppRouter, FlatRoutes } from '@backstage/core-app-api';
 import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
 import { RequirePermission } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
-
-import {
-  AIShowcasePageComponent,
-} from 'backstage-plugin-redhat-ai-project-space';
+import { NotificationsPage } from '@backstage/plugin-notifications';
+import { SignalsDisplay } from '@backstage/plugin-signals';
+import { AIShowcasePageComponent } from 'backstage-plugin-redhat-ai-project-space';
 
 const app = createApp({
   apis,
@@ -67,8 +65,7 @@ const app = createApp({
 
 const routes = (
   <FlatRoutes>
-    <Route path="/" element={<Navigate to="/ai-showcase" />} />
-    <Route path="/ai-showcase" element={<AIShowcasePageComponent />} />
+    <Route path="/" element={<Navigate to="catalog" />} />
     <Route path="/catalog" element={<CatalogIndexPage />} />
     <Route
       path="/catalog/:namespace/:kind/:name"
@@ -88,10 +85,6 @@ const routes = (
     <Route path="/create" element={<ScaffolderPage />} />
     <Route path="/api-docs" element={<ApiExplorerPage />} />
     <Route
-      path="/tech-radar"
-      element={<TechRadarPage width={1500} height={800} />}
-    />
-    <Route
       path="/catalog-import"
       element={
         <RequirePermission permission={catalogEntityCreatePermission}>
@@ -104,6 +97,8 @@ const routes = (
     </Route>
     <Route path="/settings" element={<UserSettingsPage />} />
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
+    <Route path="/notifications" element={<NotificationsPage />} />
+    <Route path="/ai-showcase" element={<AIShowcasePageComponent />} />
   </FlatRoutes>
 );
 
@@ -111,6 +106,7 @@ export default app.createRoot(
   <>
     <AlertDisplay />
     <OAuthRequestDialog />
+    <SignalsDisplay />
     <AppRouter>
       <Root>{routes}</Root>
     </AppRouter>
