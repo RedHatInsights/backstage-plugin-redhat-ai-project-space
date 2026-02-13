@@ -33,7 +33,7 @@
     "@backstage/core-plugin-api": "^1.12.2",
     "@backstage/plugin-home": "^0.9.1",
     "@backstage/theme": "^0.7.1",
-    "@janus-idp/cli": "^1.8.0",
+    "@janus-idp/cli": "^3.7.0",
     "@material-ui/core": "^4.9.13",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "4.0.0-alpha.61",
