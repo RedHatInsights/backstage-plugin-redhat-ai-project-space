@@ -69,7 +69,7 @@ export function AIShowcasePage() {
       if (usecase !== '-') usecases.add(usecase);
       if (status !== '-') statuses.add(status);
       if (domain !== '-') domains.add(domain);
-      
+
       // Extract tags from entity metadata
       if (entity.metadata.tags) {
         entity.metadata.tags.forEach(tag => tags.add(tag));
