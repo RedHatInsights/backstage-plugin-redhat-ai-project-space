@@ -20,6 +20,7 @@ metadata:
     ai-showcase/status: 'Production'
     ai-showcase/domain: 'Business Applications'
     ai-showcase/featured: 'true'
+    ai-showcase/velocity: 'test-velocity'
 spec:
   type: service
   lifecycle: production
@@ -47,6 +48,7 @@ metadata:
     ai-showcase/status: 'Production'
     ai-showcase/domain: 'Manufacturing'
     ai-showcase/featured: 'true'
+    ai-showcase/velocity: 'test-velocity'
 spec:
   type: service
   lifecycle: production
@@ -73,6 +75,7 @@ metadata:
     ai-showcase/use-case: 'Asset Management'
     ai-showcase/status: 'Production'
     ai-showcase/domain: 'Operations'
+    ai-showcase/velocity: 'test-velocity'
 spec:
   type: service
   lifecycle: production
@@ -99,6 +102,7 @@ metadata:
     ai-showcase/use-case: 'Security'
     ai-showcase/status: 'Production'
     ai-showcase/domain: 'Financial Services'
+    ai-showcase/velocity: 'test-velocity'
 spec:
   type: service
   lifecycle: production
@@ -230,6 +234,7 @@ metadata:
     ai-showcase/use-case: 'Demand Planning'
     ai-showcase/status: 'Production'
     ai-showcase/domain: 'Supply Chain'
+    ai-showcase/velocity: 'test-velocity'
 spec:
   type: service
   lifecycle: production
@@ -256,6 +261,7 @@ metadata:
     ai-showcase/use-case: 'Voice Interfaces'
     ai-showcase/status: 'Beta'
     ai-showcase/domain: 'Consumer Applications'
+    ai-showcase/velocity: 'test-velocity'
 spec:
   type: service
   lifecycle: experimental
