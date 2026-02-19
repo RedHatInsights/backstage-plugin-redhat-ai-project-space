@@ -165,7 +165,7 @@ export function AIShowcasePage() {
 
   return (
     <Page themeId="tool">
-      <Header title="AI Projects" subtitle="Red Hat AI Projects" />
+      <Header title="AI Projects V16" subtitle="Red Hat AI Projects - URL arreglada" />
       <Content>
         {loading && <Progress />}
         {error && <div>Error: {error}</div>}

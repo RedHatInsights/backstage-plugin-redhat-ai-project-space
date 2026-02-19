@@ -5,6 +5,7 @@ import { DatabaseHandler } from '../database/DatabaseHandler';
 import { LoggerService, HttpAuthService, AuthService } from '@backstage/backend-plugin-api';
 import { MiddlewareFactory } from '@backstage/backend-defaults/rootHttpRouter';
 import { Config } from '@backstage/config';
+import fetch from 'node-fetch';
 
 export interface RouterOptions {
   auth: AuthService;
@@ -19,10 +20,24 @@ const ProjectIdSchema = z.object({
   projectId: z.string().min(1, 'Project ID is required'),
 });
 
+const GitLabFileSchema = z.object({
+  projectId: z.string().min(1, 'Project ID is required'),
+  filePath: z.string().min(1, 'File path is required'),
+  ref: z.string().min(1, 'Git ref is required'),
+});
+
+const GitLabUpdateFileSchema = z.object({
+  projectId: z.string().min(1, 'Project ID is required'),
+  filePath: z.string().min(1, 'File path is required'),
+  branch: z.string().min(1, 'Branch is required'),
+  content: z.string().min(1, 'Content is required'),
+  commitMessage: z.string().min(1, 'Commit message is required'),
+});
+
 export async function createRouter(
   options: RouterOptions,
 ): Promise<express.Router> {
-  const { auth, logger, database, httpAuth } = options;
+  const { auth, logger, database, httpAuth, config } = options;
 
   const router = Router();
   router.use(express.json());
@@ -31,6 +46,141 @@ export async function createRouter(
   router.get('/health', (_, response) => {
     logger.info('Health check called');
     response.json({ status: 'ok' });
+  });
+
+  // Fetch GitLab file using backend token
+  router.post('/gitlab/file', async (request, response) => {
+    try {
+      // Validate user credentials (required by Backstage auth)
+      await httpAuth.credentials(request);
+
+      const { projectId, filePath, ref } = GitLabFileSchema.parse(request.body);
+
+      // Get GitLab token from config
+      const gitlabConfigs = config.getOptionalConfigArray('integrations.gitlab');
+      let gitlabToken: string | undefined;
+      let gitlabHost = 'gitlab.com';
+
+      if (gitlabConfigs && gitlabConfigs.length > 0) {
+        const gitlabConfig = gitlabConfigs[0];
+        gitlabToken = gitlabConfig.getOptionalString('token');
+        gitlabHost = gitlabConfig.getOptionalString('host') || 'gitlab.com';
+      }
+
+      if (!gitlabToken) {
+        logger.error('GitLab token not configured');
+        response.status(500).json({
+          error: 'GitLab integration not configured',
+        });
+        return;
+      }
+
+      const encodedFilePath = encodeURIComponent(filePath);
+      const url = `https://${gitlabHost}/api/v4/projects/${encodeURIComponent(projectId)}/repository/files/${encodedFilePath}/raw?ref=${encodeURIComponent(ref)}`;
+
+      logger.info(`Fetching GitLab file: ${url}`);
+
+      const gitlabResponse = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'PRIVATE-TOKEN': gitlabToken,
+        },
+      });
+
+      if (!gitlabResponse.ok) {
+        logger.error(`GitLab API error: ${gitlabResponse.status} ${gitlabResponse.statusText}`);
+        response.status(gitlabResponse.status).json({
+          error: `Failed to fetch file from GitLab: ${gitlabResponse.status} ${gitlabResponse.statusText}`,
+        });
+        return;
+      }
+
+      const content = await gitlabResponse.text();
+      response.json({ content });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        response.status(400).json({
+          error: 'Invalid request',
+          details: error.errors,
+        });
+      } else {
+        logger.error(`Error fetching GitLab file: ${error}`);
+        response.status(500).json({
+          error: 'Internal server error',
+        });
+      }
+    }
+  });
+
+  // Update GitLab file using backend token
+  router.put('/gitlab/file', async (request, response) => {
+    try {
+      // Validate user credentials (required by Backstage auth)
+      await httpAuth.credentials(request);
+
+      const { projectId, filePath, branch, content, commitMessage } = GitLabUpdateFileSchema.parse(request.body);
+
+      // Get GitLab token from config
+      const gitlabConfigs = config.getOptionalConfigArray('integrations.gitlab');
+      let gitlabToken: string | undefined;
+      let gitlabHost = 'gitlab.com';
+
+      if (gitlabConfigs && gitlabConfigs.length > 0) {
+        const gitlabConfig = gitlabConfigs[0];
+        gitlabToken = gitlabConfig.getOptionalString('token');
+        gitlabHost = gitlabConfig.getOptionalString('host') || 'gitlab.com';
+      }
+
+      if (!gitlabToken) {
+        logger.error('GitLab token not configured');
+        response.status(500).json({
+          error: 'GitLab integration not configured',
+        });
+        return;
+      }
+
+      const encodedFilePath = encodeURIComponent(filePath);
+      const url = `https://${gitlabHost}/api/v4/projects/${encodeURIComponent(projectId)}/repository/files/${encodedFilePath}`;
+
+      logger.info(`Updating GitLab file: ${url}`);
+
+      const gitlabResponse = await fetch(url, {
+        method: 'PUT',
+        headers: {
+          'PRIVATE-TOKEN': gitlabToken,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          branch,
+          content,
+          commit_message: commitMessage,
+        }),
+      });
+
+      if (!gitlabResponse.ok) {
+        const errorBody = await gitlabResponse.text();
+        logger.error(`GitLab API error: ${gitlabResponse.status} ${gitlabResponse.statusText} - ${errorBody}`);
+        response.status(gitlabResponse.status).json({
+          error: `Failed to update file in GitLab: ${gitlabResponse.status} ${gitlabResponse.statusText}`,
+        });
+        return;
+      }
+
+      const result = await gitlabResponse.json();
+      response.json(result);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        response.status(400).json({
+          error: 'Invalid request',
+          details: error.errors,
+        });
+      } else {
+        logger.error(`Error updating GitLab file: ${error}`);
+        response.status(500).json({
+          error: 'Internal server error',
+        });
+      }
+    }
   });
 
   // Get all votes - MUST come before /votes/:projectId to avoid route collision

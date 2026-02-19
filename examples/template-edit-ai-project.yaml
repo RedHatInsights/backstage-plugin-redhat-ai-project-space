@@ -1,0 +1,384 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: edit-ai-project
+  title: Edit AI Project Configuration
+  description: Update an existing AI project configuration with immediate changes to the catalog
+  tags:
+    - ai
+    - edit
+    - configuration
+    - gitlab
+    - direct-commit
+spec:
+  owner: user:guest
+  type: service
+
+  parameters:
+    - title: Project Information
+      required:
+        - projectId
+        - componentPath
+        - projectName
+      properties:
+        projectId:
+          title: GitLab Project ID
+          type: string
+          description: Encoded GitLab project ID (hcm-engprod%2Finscope-catalog-entries)
+          ui:autofocus: false
+          ui:disabled: true
+
+        componentPath:
+          title: Component Path
+          type: string
+          description: Path to the component YAML file in the repository
+          ui:autofocus: false
+          ui:disabled: true
+
+        projectName:
+          title: Project Slug (Name)
+          type: string
+          description: Name/slug of the project (metadata.name)
+          ui:autofocus: false
+          ui:disabled: true
+
+    - title: Project Metadata
+      required:
+        - title
+        - description
+        - owner
+      properties:
+        title:
+          title: Project Title
+          type: string
+          description: Human-readable title for the component (metadata.title)
+
+        description:
+          title: Description
+          type: string
+          description: Project description
+          ui:widget: textarea
+          ui:options:
+            rows: 5
+
+        tags:
+          title: Tags
+          type: array
+          description: Project tags for categorization (lowercase letters and numbers only)
+          items:
+            type: string
+            pattern: '^[a-z0-9]+$'
+          ui:options:
+            orderable: true
+
+    - title: AI Project Annotations
+      required:
+        - category
+        - usecase
+        - owner
+        - domain
+        - status
+      properties:
+        category:
+          title: AI Category
+          type: string
+          description: The AI category for this component
+          enum:
+            - Agent
+            - MCP Server (stdio)
+            - MCP Server (hosted)
+            - Tool
+            - Script
+            - Framework
+            - Platform
+            - Skill
+
+        usecase:
+          title: AI Use Case
+          type: string
+          description: The primary AI use case
+          enum:
+            - Requirements & Design
+            - Development
+            - Testing
+            - Documentation
+            - Deployment & Monitoring
+            - Data Analytics
+            - Security & Vulnerability Detection
+            - Process Automation
+
+        owner:
+          title: Owner Team
+          type: string
+          description: The team that owns this component (ai.redhat.com/owner annotation)
+          ui:placeholder: 'e.g., hcm-engineering-productivity'
+
+        domain:
+          title: Domain
+          type: string
+          description: Whether this is an internal or external component
+          enum:
+            - internal
+            - external
+          default: internal
+
+        status:
+          title: Status
+          type: string
+          description: Current status of the component
+          enum:
+            - active
+            - inactive
+          default: active
+
+        featured:
+          title: Featured on AI Portal
+          type: boolean
+          description: Mark as featured project on the AI portal homepage
+          default: false
+
+    - title: Repository Information
+      required:
+        - repoType
+      properties:
+        repoType:
+          title: Repository Type
+          type: string
+          description: Select where your repository is hosted
+          enum:
+            - GitHub
+            - GitLab
+          default: GitHub
+      dependencies:
+        repoType:
+          oneOf:
+            - properties:
+                repoType:
+                  enum:
+                    - GitHub
+                githubUrl:
+                  title: GitHub URL
+                  type: string
+                  description: 'Full GitHub repository URL (e.g., https://github.com/RedHatInsights/my-project)'
+                  pattern: '^https://github\.com/[a-zA-Z0-9_-]+/[a-zA-Z0-9_.-]+/?$'
+                  patternErrorMessage: 'Must be a valid GitHub URL (https://github.com/owner/repo)'
+                  ui:placeholder: 'https://github.com/RedHatInsights/my-project'
+              required:
+                - githubUrl
+            - properties:
+                repoType:
+                  enum:
+                    - GitLab
+                gitlabUrl:
+                  title: GitLab URL
+                  type: string
+                  description: 'Full GitLab repository URL (e.g., https://gitlab.cee.redhat.com/group/project)'
+                  pattern: '^https://[a-zA-Z0-9.-]+/[a-zA-Z0-9_/-]+/?$'
+                  patternErrorMessage: 'Must be a valid GitLab URL'
+                  ui:placeholder: 'https://gitlab.cee.redhat.com/group/project'
+              required:
+                - gitlabUrl
+
+  steps:
+    - id: fetch
+      name: Fetch Repository Content
+      action: fetch:plain
+      input:
+        url: https://gitlab.cee.redhat.com/hcm-engprod/inscope-catalog-entries/tree/main
+
+    - id: patch-metadata
+      name: Update Basic Metadata
+      action: roadiehq:utils:shell
+      input:
+        command: |
+          # Install yq if not available
+          if ! command -v yq &> /dev/null; then
+            echo "Installing yq..."
+            wget -qO /tmp/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+            chmod +x /tmp/yq
+            YQ_CMD="/tmp/yq"
+          else
+            YQ_CMD="yq"
+          fi
+
+          # Update title
+          $YQ_CMD -i '.metadata.title = "${{ parameters.title }}"' ${{ parameters.componentPath }}
+
+          # Update description (multiline)
+          cat > /tmp/description.txt <<'EOF'
+          ${{ parameters.description }}
+          EOF
+          $YQ_CMD -i '.metadata.description = load("/tmp/description.txt")' ${{ parameters.componentPath }}
+
+    - id: patch-tags
+      name: Update Tags
+      action: roadiehq:utils:shell
+      input:
+        command: |
+          YQ_CMD=$(command -v yq || echo "/tmp/yq")
+
+          # Clear existing tags
+          $YQ_CMD -i 'del(.metadata.tags)' ${{ parameters.componentPath }}
+
+          # Add new tags (if any provided)
+          {% if parameters.tags and parameters.tags|length > 0 %}
+          {% for tag in parameters.tags %}
+          $YQ_CMD -i '.metadata.tags += ["${{ tag }}"]' ${{ parameters.componentPath }}
+          {% endfor %}
+          {% else %}
+          $YQ_CMD -i '.metadata.tags = []' ${{ parameters.componentPath }}
+          {% endif %}
+
+    - id: patch-annotations
+      name: Update AI Annotations
+      action: roadiehq:utils:shell
+      input:
+        command: |
+          YQ_CMD=$(command -v yq || echo "/tmp/yq")
+
+          # Update category
+          $YQ_CMD -i '.metadata.annotations."ai.redhat.com/category" = "${{ parameters.category }}"' ${{ parameters.componentPath }}
+
+          # Update usecase
+          $YQ_CMD -i '.metadata.annotations."ai.redhat.com/usecase" = "${{ parameters.usecase }}"' ${{ parameters.componentPath }}
+
+          # Update owner (annotation, not spec.owner)
+          $YQ_CMD -i '.metadata.annotations."ai.redhat.com/owner" = "${{ parameters.owner }}"' ${{ parameters.componentPath }}
+
+          # Update status
+          $YQ_CMD -i '.metadata.annotations."ai.redhat.com/status" = "${{ parameters.status }}"' ${{ parameters.componentPath }}
+
+          # Update domain
+          $YQ_CMD -i '.metadata.annotations."ai.redhat.com/domain" = "${{ parameters.domain }}"' ${{ parameters.componentPath }}
+
+          # Update featured (as string 'true' or 'false')
+          $YQ_CMD -i '.metadata.annotations."ai.redhat.com/featured" = "${{ parameters.featured | string | lower }}"' ${{ parameters.componentPath }}
+
+    - id: patch-repository
+      name: Update Repository Annotations
+      action: roadiehq:utils:shell
+      input:
+        command: |
+          YQ_CMD=$(command -v yq || echo "/tmp/yq")
+
+          {% if parameters.repoType == 'GitHub' %}
+          # GitHub repository
+          GITHUB_SLUG="${{ parameters.githubUrl | replace('https://github.com/', '') | replace('http://github.com/', '') | trim('/') }}"
+
+          # Remove GitLab annotations if they exist
+          $YQ_CMD -i 'del(.metadata.annotations."gitlab.com/instance")' ${{ parameters.componentPath }}
+          $YQ_CMD -i 'del(.metadata.annotations."gitlab.com/project-slug")' ${{ parameters.componentPath }}
+
+          # Set GitHub annotations
+          $YQ_CMD -i ".metadata.annotations.\"github.com/project-slug\" = \"$GITHUB_SLUG\"" ${{ parameters.componentPath }}
+          $YQ_CMD -i '.metadata.annotations."backstage.io/techdocs-ref" = "url:${{ parameters.githubUrl }}"' ${{ parameters.componentPath }}
+          $YQ_CMD -i '.metadata.annotations."backstage.io/source-location" = "url:${{ parameters.githubUrl }}/"' ${{ parameters.componentPath }}
+
+          {% elif parameters.repoType == 'GitLab' %}
+          # GitLab repository
+          GITLAB_INSTANCE=$(echo "${{ parameters.gitlabUrl }}" | sed -E 's|https://([^/]+)/.*|\1|')
+          GITLAB_SLUG="${{ parameters.gitlabUrl | replace('https://', '') | replace('http://', '') }}"
+          GITLAB_SLUG=$(echo "$GITLAB_SLUG" | sed "s|^$GITLAB_INSTANCE/||" | sed 's|/$||')
+
+          # Remove GitHub annotations if they exist
+          $YQ_CMD -i 'del(.metadata.annotations."github.com/project-slug")' ${{ parameters.componentPath }}
+
+          # Set GitLab annotations
+          $YQ_CMD -i ".metadata.annotations.\"gitlab.com/instance\" = \"$GITLAB_INSTANCE\"" ${{ parameters.componentPath }}
+          $YQ_CMD -i ".metadata.annotations.\"gitlab.com/project-slug\" = \"$GITLAB_SLUG\"" ${{ parameters.componentPath }}
+          $YQ_CMD -i '.metadata.annotations."backstage.io/techdocs-ref" = "url:${{ parameters.gitlabUrl }}"' ${{ parameters.componentPath }}
+          $YQ_CMD -i '.metadata.annotations."backstage.io/source-location" = "url:${{ parameters.gitlabUrl }}/"' ${{ parameters.componentPath }}
+
+          {% endif %}
+
+    - id: log-changes
+      name: Log Changes
+      action: debug:log
+      input:
+        message: |
+          Updated configuration for: ${{ parameters.projectName }} (${{ parameters.title }})
+          - Title: ${{ parameters.title }}
+          - Description: ${{ parameters.description }}
+          - Tags: ${{ parameters.tags | join(', ') }}
+          - Category: ${{ parameters.category }}
+          - Use Case: ${{ parameters.usecase }}
+          - Owner: ${{ parameters.owner }}
+          - Domain: ${{ parameters.domain }}
+          - Status: ${{ parameters.status }}
+          - Featured: ${{ parameters.featured }}
+          - Repository Type: ${{ parameters.repoType }}
+          {% if parameters.repoType == 'GitHub' %}- GitHub URL: ${{ parameters.githubUrl }}{% endif %}
+          {% if parameters.repoType == 'GitLab' %}- GitLab URL: ${{ parameters.gitlabUrl }}{% endif %}
+
+    - id: validate-yaml
+      name: Validate YAML Syntax
+      action: roadiehq:utils:shell
+      input:
+        command: |
+          YQ_CMD=$(command -v yq || echo "/tmp/yq")
+
+          # Validate YAML syntax
+          if ! $YQ_CMD eval ${{ parameters.componentPath }} > /dev/null 2>&1; then
+            echo "ERROR: Invalid YAML syntax in ${{ parameters.componentPath }}"
+            exit 1
+          fi
+
+          echo "✅ YAML syntax is valid"
+
+    - id: publish
+      name: Commit Changes to Main
+      action: publish:gitlab
+      input:
+        repoUrl: gitlab.cee.redhat.com?repo=inscope-catalog-entries&owner=hcm-engprod
+        defaultBranch: main
+        gitCommitMessage: |
+          Update AI component: ${{ parameters.title }}
+
+          Updated configuration for ${{ parameters.projectName }}:
+          - Title: ${{ parameters.title }}
+          - Description: ${{ parameters.description }}
+          - Tags: ${{ parameters.tags | join(', ') }}
+          - Category: ${{ parameters.category }}
+          - Use Case: ${{ parameters.usecase }}
+          - Owner: ${{ parameters.owner }}
+          - Domain: ${{ parameters.domain }}
+          - Status: ${{ parameters.status }}
+          - Featured: ${{ parameters.featured }}
+          - Repository Type: ${{ parameters.repoType }}
+          {% if parameters.repoType == 'GitHub' %}- GitHub URL: ${{ parameters.githubUrl }}{% endif %}
+          {% if parameters.repoType == 'GitLab' %}- GitLab URL: ${{ parameters.gitlabUrl }}{% endif %}
+
+          Updated via Red Hat Developer Hub Edit AI Project template
+        gitAuthorName: RHDH Scaffolder
+        gitAuthorEmail: rhdh-scaffolder@redhat.com
+
+  output:
+    text:
+      - title: ✅ Project Updated Successfully!
+        content: |
+          Your AI project configuration has been updated and committed directly to the main branch.
+
+          **Changes are now live!** The updated configuration will be reflected in the catalog within a few minutes.
+
+          **Updated Project:** ${{ parameters.title }} (`${{ parameters.projectName }}`)
+
+          **Updated Fields:**
+          - Title, Description, Tags
+          - Category: ${{ parameters.category }}
+          - Use Case: ${{ parameters.usecase }}
+          - Owner: ${{ parameters.owner }}
+          - Status: ${{ parameters.status }}
+          - Repository: ${{ parameters.repoType }} ({% if parameters.repoType == 'GitHub' %}${{ parameters.githubUrl }}{% else %}${{ parameters.gitlabUrl }}{% endif %})
+
+          Thank you for keeping the Red Hat AI Project Space up to date!
+
+    links:
+      - title: View Commit in GitLab
+        icon: gitlab
+        url: ${{ steps.publish.output.remoteUrl }}
+      - title: View in Catalog
+        icon: catalog
+        url: /catalog/ai/component/${{ parameters.projectName }}
+      - title: View Component File (main)
+        icon: docs
+        url: https://gitlab.cee.redhat.com/hcm-engprod/inscope-catalog-entries/-/blob/main/${{ parameters.componentPath }}

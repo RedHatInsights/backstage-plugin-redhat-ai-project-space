@@ -1,0 +1,21 @@
+dynamicPlugins:
+  frontend:
+    backstage-plugin-redhat-ai-project-space:
+      appIcons:
+        - name: aiProjectSpaceIcon
+          importName: AiProjectSpaceIcon
+      dynamicRoutes:
+        - path: /ai-projects
+          importName: AIShowcasePage
+          menuItem:
+            text: AI Projects
+            icon: aiProjectSpaceIcon
+      mountPoints:
+        - mountPoint: entity.page.overview/cards
+          importName: EntityAIProjectCard
+          config:
+            layout:
+              gridColumnEnd:
+                lg: span 6
+                md: span 6
+                xs: span 12

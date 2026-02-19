@@ -6,6 +6,7 @@ import {
   fetchApiRef,
 } from '@backstage/core-plugin-api';
 import { projectVotesApiRef, ProjectVotesClient } from './api/ProjectVotesApi';
+import { gitlabApiClientRef, GitLabApiClientImpl } from './api/GitLabApiClient';
 
 export const redhatAIProjectSpacePlugin = createPlugin({
   id: 'redhat-ai-project-space',
@@ -19,6 +20,15 @@ export const redhatAIProjectSpacePlugin = createPlugin({
       factory: ({ discoveryApi, fetchApi }) =>
         new ProjectVotesClient(discoveryApi, fetchApi),
     }),
+    createApiFactory({
+      api: gitlabApiClientRef,
+      deps: {
+        discoveryApi: discoveryApiRef,
+        fetchApi: fetchApiRef,
+      },
+      factory: ({ discoveryApi, fetchApi }) =>
+        new GitLabApiClientImpl(discoveryApi, fetchApi),
+    }),
   ],
 });
 
@@ -27,6 +37,15 @@ export const AIShowcasePageComponent = redhatAIProjectSpacePlugin.provide(
     name: 'AIShowcasePageComponent',
     component: {
       lazy: () => import('./components/AIShowcasePage').then(m => m.AIShowcasePage),
+    }
+  }),
+);
+
+export const EditProjectPageComponent = redhatAIProjectSpacePlugin.provide(
+  createComponentExtension({
+    name: 'EditProjectPageComponent',
+    component: {
+      lazy: () => import('./components/EditProjectPage').then(m => m.EditProjectPage),
     }
   }),
 );

@@ -29,6 +29,7 @@
     "export-dynamic": "janus-cli package export-dynamic-plugin"
   },
   "dependencies": {
+    "@backstage/catalog-model": "^1.7.2",
     "@backstage/core-components": "^0.18.6",
     "@backstage/core-plugin-api": "^1.12.2",
     "@backstage/plugin-home": "^0.9.1",
@@ -40,8 +41,10 @@
     "@mdi/js": "^7.4.47",
     "@mdi/react": "^1.6.1",
     "@mui/x-charts": "^7.4.0",
+    "@types/js-yaml": "^4.0.9",
     "graphql-request": "^6.1.0",
     "js-levenshtein": "^1.1.6",
+    "js-yaml": "^4.1.0",
     "react-use": "^17.2.4",
     "tss-react": "^4.9.10"
   },
