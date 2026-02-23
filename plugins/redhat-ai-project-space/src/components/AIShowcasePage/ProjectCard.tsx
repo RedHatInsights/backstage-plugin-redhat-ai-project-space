@@ -69,6 +69,8 @@ const useStyles = makeStyles((theme) => ({
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
     maxWidth: '150px',
+    textDecoration: 'none',
+    flexShrink: 1,
   },
   tagChip: {
     margin: theme.spacing(0.25),
@@ -102,6 +104,30 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: '#fb8c00',
     },
   },
+  maturityChipGraduated: {
+    backgroundColor: '#4caf50',
+    color: '#fff',
+    fontWeight: 600,
+    '&:hover': {
+      backgroundColor: '#45a049',
+    },
+  },
+  maturityChipIncubating: {
+    backgroundColor: '#2196f3',
+    color: '#fff',
+    fontWeight: 600,
+    '&:hover': {
+      backgroundColor: '#1976d2',
+    },
+  },
+  maturityChipSandbox: {
+    backgroundColor: '#ff9800',
+    color: '#fff',
+    fontWeight: 600,
+    '&:hover': {
+      backgroundColor: '#fb8c00',
+    },
+  },
 }));
 
 interface ProjectCardProps {
@@ -116,7 +142,7 @@ export function ProjectCard({ entity, votes, onVoteChange }: ProjectCardProps) {
   const category = getAnnotation(entity, 'category');
   const usecase = getAnnotation(entity, 'usecase');
   const status = getAnnotation(entity, 'status');
-  const owner = getAnnotation(entity, 'owner');
+  const owner = (entity.spec?.owner as string) || '-';
   const domain = getAnnotation(entity, 'domain');
   const maturity = getAnnotation(entity, 'maturity');
   const featured = isFeatured(entity);
@@ -131,6 +157,21 @@ export function ProjectCard({ entity, votes, onVoteChange }: ProjectCardProps) {
         <Box className={classes.titleRow}>
           <Box className={classes.titleContainer}>
             {featured && <StarIcon className={classes.starIcon} />}
+            {maturity !== '-' && (
+              <Chip
+                label={maturity}
+                size="small"
+                className={
+                  maturity.toLowerCase() === 'graduated'
+                    ? classes.maturityChipGraduated
+                    : maturity.toLowerCase() === 'incubating'
+                    ? classes.maturityChipIncubating
+                    : maturity.toLowerCase() === 'sandbox'
+                    ? classes.maturityChipSandbox
+                    : undefined
+                }
+              />
+            )}
             <Link
               to={`/catalog/${entity.metadata.namespace}/${entity.kind.toLowerCase()}/${
                 entity.metadata.name
@@ -204,14 +245,8 @@ export function ProjectCard({ entity, votes, onVoteChange }: ProjectCardProps) {
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
             <div className={classes.metadataItem}>
-              <Typography className={classes.metadataLabel}>Maturity</Typography>
-              <Typography className={classes.metadataValue}>{maturity}</Typography>
-            </div>
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <div className={classes.metadataItem}>
               <Typography className={classes.metadataLabel}>Owner</Typography>
-              <Box display="flex" alignItems="center">
+              <Box display="flex" alignItems="center" flexWrap="nowrap">
                 <Typography className={classes.ownerName} title={owner}>
                   {owner}
                 </Typography>
@@ -226,7 +261,7 @@ export function ProjectCard({ entity, votes, onVoteChange }: ProjectCardProps) {
                         ? classes.externalProjectChip
                         : undefined
                     }
-                    style={{ marginLeft: 8 }}
+                    style={{ marginLeft: 8, flexShrink: 0 }}
                   />
                 )}
               </Box>
