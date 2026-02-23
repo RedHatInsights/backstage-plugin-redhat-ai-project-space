@@ -81,7 +81,7 @@ describe('utils', () => {
           name: 'test-component',
           annotations: {
             'ai.redhat.com/category': 'ML',
-            'ai.redhat.com/usecase': 'NLP',
+            'ai.redhat.com/use-case': 'NLP',
             'ai.redhat.com/velocity': 'VELOCITY-789',
             'ai.redhat.com/owner': 'Team A',
           },
@@ -89,7 +89,7 @@ describe('utils', () => {
       };
 
       expect(getAnnotation(entity, 'category')).toBe('ML');
-      expect(getAnnotation(entity, 'usecase')).toBe('NLP');
+      expect(getAnnotation(entity, 'use-case')).toBe('NLP');
       expect(getAnnotation(entity, 'velocity')).toBe('VELOCITY-789');
       expect(getAnnotation(entity, 'owner')).toBe('Team A');
     });

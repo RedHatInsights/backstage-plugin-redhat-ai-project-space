@@ -13,7 +13,7 @@ jest.mock('./VoteButtons', () => ({
 const createMockEntity = (velocityId?: string): Entity => {
   const annotations: Record<string, string> = {
     'ai.redhat.com/category': 'Test Category',
-    'ai.redhat.com/usecase': 'Test Usecase',
+    'ai.redhat.com/use-case': 'Test Usecase',
     'ai.redhat.com/status': 'Active',
     'ai.redhat.com/owner': 'Test Owner',
     'ai.redhat.com/domain': 'Internal',

@@ -119,7 +119,7 @@ export function ProjectCard({ entity, votes, onVoteChange }: ProjectCardProps) {
   const classes = useStyles();
 
   const category = getAnnotation(entity, 'category');
-  const usecase = getAnnotation(entity, 'usecase');
+  const usecase = getAnnotation(entity, 'use-case');
   const status = getAnnotation(entity, 'status');
   const owner = getAnnotation(entity, 'owner');
   const domain = getAnnotation(entity, 'domain');
