@@ -118,6 +118,7 @@ export function ProjectCard({ entity, votes, onVoteChange }: ProjectCardProps) {
   const status = getAnnotation(entity, 'status');
   const owner = getAnnotation(entity, 'owner');
   const domain = getAnnotation(entity, 'domain');
+  const maturity = getAnnotation(entity, 'maturity');
   const featured = isFeatured(entity);
   
   // Generate a unique project ID from the entity
@@ -199,6 +200,12 @@ export function ProjectCard({ entity, votes, onVoteChange }: ProjectCardProps) {
                   color="default"
                 />
               </Box>
+            </div>
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <div className={classes.metadataItem}>
+              <Typography className={classes.metadataLabel}>Maturity</Typography>
+              <Typography className={classes.metadataValue}>{maturity}</Typography>
             </div>
           </Grid>
           <Grid item xs={12} sm={6} md={3}>

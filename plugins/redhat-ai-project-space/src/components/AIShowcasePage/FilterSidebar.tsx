@@ -147,6 +147,11 @@ export function FilterSidebar({
         filterType="status"
       />
       <FilterSection
+        label="Maturity"
+        options={filterOptions.maturities}
+        filterType="maturity"
+      />
+      <FilterSection
         label="Domain"
         options={filterOptions.domains}
         filterType="domain"
