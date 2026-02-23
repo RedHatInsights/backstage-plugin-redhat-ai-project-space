@@ -20,7 +20,7 @@ metadata:
     ai.redhat.com/status: 'Production'
     ai.redhat.com/domain: 'Business Applications'
     ai.redhat.com/featured: 'true'
-    ai.redhat.com/maturity: 'sandbox'
+    ai.redhat.com/maturity: 'graduated'
 spec:
   type: service
   lifecycle: production
@@ -211,7 +211,7 @@ metadata:
     ai.redhat.com/status: 'Beta'
     ai.redhat.com/domain: 'Software Development'
     ai.redhat.com/featured: 'true'
-    ai.redhat.com/maturity: 'sandbox'
+    ai.redhat.com/maturity: 'incubating'
 spec:
   type: service
   lifecycle: experimental
