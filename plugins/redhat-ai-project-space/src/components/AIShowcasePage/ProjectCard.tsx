@@ -1,7 +1,7 @@
 
 import { Link } from '@backstage/core-components';
 import { Entity } from '@backstage/catalog-model';
-import { Card, CardContent, Grid, Chip, Typography, Box, Button } from '@material-ui/core';
+import { Card, CardContent, Chip, Typography, Box, Button } from '@material-ui/core';
 import StarIcon from '@material-ui/icons/Star';
 import { makeStyles } from '@material-ui/core/styles';
 import { getAnnotation, isFeatured } from './utils';
@@ -56,11 +56,16 @@ const useStyles = makeStyles((theme) => ({
   metadataGrid: {
     borderTop: `1px solid ${theme.palette.divider}`,
     paddingTop: theme.spacing(2),
+    display: 'flex',
+    gap: theme.spacing(2),
+    flexWrap: 'wrap',
   },
   metadataItem: {
     display: 'flex',
     flexDirection: 'column',
     gap: theme.spacing(0.5),
+    flex: '1 1 0',
+    minWidth: 0,
   },
   metadataLabel: {
     fontSize: '0.75rem',
@@ -149,11 +154,12 @@ export function ProjectCard({ entity, votes, onVoteChange }: ProjectCardProps) {
   const classes = useStyles();
 
   const category = getAnnotation(entity, 'category');
-  const usecase = getAnnotation(entity, 'usecase');
+  const usecase = getAnnotation(entity, 'use-case');
   const status = getAnnotation(entity, 'status');
   const owner = (entity.spec?.owner as string) || '-';
   const domain = getAnnotation(entity, 'domain');
   const maturity = getAnnotation(entity, 'maturity');
+  const velocity = getAnnotation(entity, 'velocity');
   const featured = isFeatured(entity);
   
   // Generate a unique project ID from the entity
@@ -242,56 +248,52 @@ export function ProjectCard({ entity, votes, onVoteChange }: ProjectCardProps) {
         )}
 
         {/* Metadata Grid Row */}
-        <Grid container spacing={2} className={classes.metadataGrid}>
-          <Grid item xs={12} sm={6} md={3}>
-            <div className={classes.metadataItem}>
-              <Typography className={classes.metadataLabel}>Category</Typography>
-              <Typography className={classes.metadataValue}>{category}</Typography>
-            </div>
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <div className={classes.metadataItem}>
-              <Typography className={classes.metadataLabel}>Usecase</Typography>
-              <Typography className={classes.metadataValue}>{usecase}</Typography>
-            </div>
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <div className={classes.metadataItem}>
-              <Typography className={classes.metadataLabel}>Status</Typography>
-              <Box className={classes.statusChipContainer}>
+        <Box className={classes.metadataGrid}>
+          <div className={classes.metadataItem}>
+            <Typography className={classes.metadataLabel}>Category</Typography>
+            <Typography className={classes.metadataValue}>{category}</Typography>
+          </div>
+          <div className={classes.metadataItem}>
+            <Typography className={classes.metadataLabel}>Usecase</Typography>
+            <Typography className={classes.metadataValue}>{usecase}</Typography>
+          </div>
+          <div className={classes.metadataItem}>
+            <Typography className={classes.metadataLabel}>Status</Typography>
+            <Box className={classes.statusChipContainer}>
+              <Chip
+                label={status}
+                size="small"
+                color="default"
+              />
+            </Box>
+          </div>
+          <div className={classes.metadataItem}>
+            <Typography className={classes.metadataLabel}>Velocity ID</Typography>
+            <Typography className={classes.metadataValue}>{velocity}</Typography>
+          </div>
+          <div className={classes.metadataItem}>
+            <Typography className={classes.metadataLabel}>Owner</Typography>
+            <Box display="flex" alignItems="center">
+              <Typography className={classes.ownerName} title={owner}>
+                {owner}
+              </Typography>
+              {domain !== '-' && (
                 <Chip
-                  label={status}
+                  label={domain}
                   size="small"
-                  color="default"
+                  className={
+                    domain.toLowerCase() === 'internal'
+                      ? classes.internalProjectChip
+                      : domain.toLowerCase() === 'external'
+                      ? classes.externalProjectChip
+                      : undefined
+                  }
+                  style={{ marginLeft: 8 }}
                 />
-              </Box>
-            </div>
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <div className={classes.metadataItem}>
-              <Typography className={classes.metadataLabel}>Owner</Typography>
-              <Box display="flex" alignItems="center" flexWrap="nowrap">
-                <Typography className={classes.ownerName} title={owner}>
-                  {owner}
-                </Typography>
-                {domain !== '-' && (
-                  <Chip
-                    label={domain}
-                    size="small"
-                    className={
-                      domain.toLowerCase() === 'internal'
-                        ? classes.internalProjectChip
-                        : domain.toLowerCase() === 'external'
-                        ? classes.externalProjectChip
-                        : undefined
-                    }
-                    style={{ marginLeft: 8, flexShrink: 0 }}
-                  />
-                )}
-              </Box>
-            </div>
-          </Grid>
-        </Grid>
+              )}
+            </Box>
+          </div>
+        </Box>
 
         {/* Vote Buttons */}
         <Box className={classes.voteContainer}>
