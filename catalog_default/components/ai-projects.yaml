@@ -15,11 +15,12 @@ metadata:
     - nlp
     - customer-support
   annotations:
-    ai-showcase/category: 'Natural Language Processing'
-    ai-showcase/use-case: 'Customer Support'
-    ai-showcase/status: 'Production'
-    ai-showcase/domain: 'Business Applications'
-    ai-showcase/featured: 'true'
+    ai.redhat.com/category: 'Natural Language Processing'
+    ai.redhat.com/use-case: 'Customer Support'
+    ai.redhat.com/status: 'Production'
+    ai.redhat.com/domain: 'Business Applications'
+    ai.redhat.com/featured: 'true'
+    ai.redhat.com/velocity: 'test-velocity'
 spec:
   type: service
   lifecycle: production
@@ -42,11 +43,12 @@ metadata:
     - manufacturing
     - quality-control
   annotations:
-    ai-showcase/category: 'Computer Vision'
-    ai-showcase/use-case: 'Quality Assurance'
-    ai-showcase/status: 'Production'
-    ai-showcase/domain: 'Manufacturing'
-    ai-showcase/featured: 'true'
+    ai.redhat.com/category: 'Computer Vision'
+    ai.redhat.com/use-case: 'Quality Assurance'
+    ai.redhat.com/status: 'Production'
+    ai.redhat.com/domain: 'Manufacturing'
+    ai.redhat.com/featured: 'true'
+    ai.redhat.com/velocity: 'test-velocity'
 spec:
   type: service
   lifecycle: production
@@ -69,10 +71,11 @@ metadata:
     - iot
     - maintenance
   annotations:
-    ai-showcase/category: 'Predictive Analytics'
-    ai-showcase/use-case: 'Asset Management'
-    ai-showcase/status: 'Production'
-    ai-showcase/domain: 'Operations'
+    ai.redhat.com/category: 'Predictive Analytics'
+    ai.redhat.com/use-case: 'Asset Management'
+    ai.redhat.com/status: 'Production'
+    ai.redhat.com/domain: 'Operations'
+    ai.redhat.com/velocity: 'test-velocity'
 spec:
   type: service
   lifecycle: production
@@ -95,10 +98,11 @@ metadata:
     - security
     - fintech
   annotations:
-    ai-showcase/category: 'Anomaly Detection'
-    ai-showcase/use-case: 'Security'
-    ai-showcase/status: 'Production'
-    ai-showcase/domain: 'Financial Services'
+    ai.redhat.com/category: 'Anomaly Detection'
+    ai.redhat.com/use-case: 'Security'
+    ai.redhat.com/status: 'Production'
+    ai.redhat.com/domain: 'Financial Services'
+    ai.redhat.com/velocity: 'test-velocity'
 spec:
   type: service
   lifecycle: production
@@ -121,10 +125,10 @@ metadata:
     - document-processing
     - automation
   annotations:
-    ai-showcase/category: 'Natural Language Processing'
-    ai-showcase/use-case: 'Document Processing'
-    ai-showcase/status: 'Beta'
-    ai-showcase/domain: 'Business Applications'
+    ai.redhat.com/category: 'Natural Language Processing'
+    ai.redhat.com/use-case: 'Document Processing'
+    ai.redhat.com/status: 'Beta'
+    ai.redhat.com/domain: 'Business Applications'
 spec:
   type: service
   lifecycle: experimental
@@ -147,10 +151,10 @@ metadata:
     - personalization
     - e-commerce
   annotations:
-    ai-showcase/category: 'Recommendation Systems'
-    ai-showcase/use-case: 'Personalization'
-    ai-showcase/status: 'Production'
-    ai-showcase/domain: 'E-commerce'
+    ai.redhat.com/category: 'Recommendation Systems'
+    ai.redhat.com/use-case: 'Personalization'
+    ai.redhat.com/status: 'Production'
+    ai.redhat.com/domain: 'E-commerce'
 spec:
   type: service
   lifecycle: production
@@ -173,10 +177,10 @@ metadata:
     - sentiment-analysis
     - customer-insights
   annotations:
-    ai-showcase/category: 'Natural Language Processing'
-    ai-showcase/use-case: 'Customer Insights'
-    ai-showcase/status: 'Production'
-    ai-showcase/domain: 'Marketing'
+    ai.redhat.com/category: 'Natural Language Processing'
+    ai.redhat.com/use-case: 'Customer Insights'
+    ai.redhat.com/status: 'Production'
+    ai.redhat.com/domain: 'Marketing'
 spec:
   type: service
   lifecycle: production
@@ -199,11 +203,11 @@ metadata:
     - developer-tools
     - productivity
   annotations:
-    ai-showcase/category: 'Code Generation'
-    ai-showcase/use-case: 'Developer Productivity'
-    ai-showcase/status: 'Beta'
-    ai-showcase/domain: 'Software Development'
-    ai-showcase/featured: 'true'
+    ai.redhat.com/category: 'Code Generation'
+    ai.redhat.com/use-case: 'Developer Productivity'
+    ai.redhat.com/status: 'Beta'
+    ai.redhat.com/domain: 'Software Development'
+    ai.redhat.com/featured: 'true'
 spec:
   type: service
   lifecycle: experimental
@@ -226,10 +230,10 @@ metadata:
     - time-series
     - planning
   annotations:
-    ai-showcase/category: 'Predictive Analytics'
-    ai-showcase/use-case: 'Demand Planning'
-    ai-showcase/status: 'Production'
-    ai-showcase/domain: 'Supply Chain'
+    ai.redhat.com/category: 'Predictive Analytics'
+    ai.redhat.com/use-case: 'Demand Planning'
+    ai.redhat.com/status: 'Production'
+    ai.redhat.com/domain: 'Supply Chain'
 spec:
   type: service
   lifecycle: production
@@ -252,10 +256,10 @@ metadata:
     - speech-recognition
     - nlp
   annotations:
-    ai-showcase/category: 'Speech & Audio'
-    ai-showcase/use-case: 'Voice Interfaces'
-    ai-showcase/status: 'Beta'
-    ai-showcase/domain: 'Consumer Applications'
+    ai.redhat.com/category: 'Speech & Audio'
+    ai.redhat.com/use-case: 'Voice Interfaces'
+    ai.redhat.com/status: 'Beta'
+    ai.redhat.com/domain: 'Consumer Applications'
 spec:
   type: service
   lifecycle: experimental

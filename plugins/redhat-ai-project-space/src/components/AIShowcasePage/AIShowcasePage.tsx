@@ -61,7 +61,7 @@ export function AIShowcasePage() {
 
     entities.forEach(entity => {
       const category = getAnnotation(entity, 'category');
-      const usecase = getAnnotation(entity, 'usecase');
+      const usecase = getAnnotation(entity, 'use-case');
       const status = getAnnotation(entity, 'status');
       const domain = getAnnotation(entity, 'domain');
 
@@ -69,7 +69,7 @@ export function AIShowcasePage() {
       if (usecase !== '-') usecases.add(usecase);
       if (status !== '-') statuses.add(status);
       if (domain !== '-') domains.add(domain);
-      
+
       // Extract tags from entity metadata
       if (entity.metadata.tags) {
         entity.metadata.tags.forEach(tag => tags.add(tag));
@@ -99,7 +99,7 @@ export function AIShowcasePage() {
         if (category !== filters.category) return false;
       }
       if (filters.usecase) {
-        const usecase = getAnnotation(entity, 'usecase');
+        const usecase = getAnnotation(entity, 'use-case');
         if (usecase !== filters.usecase) return false;
       }
       if (filters.status) {
