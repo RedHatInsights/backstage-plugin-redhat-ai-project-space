@@ -3,6 +3,7 @@ export interface Filters {
   usecase: string;
   status: string;
   domain: string;
+  maturity: string;
   featured: boolean;
   tags: string[];
 }
@@ -12,6 +13,7 @@ export interface FilterOptions {
   usecases: string[];
   statuses: string[];
   domains: string[];
+  maturities: string[];
   tags: string[];
 }
 

@@ -16,10 +16,11 @@ metadata:
     - customer-support
   annotations:
     ai.redhat.com/category: 'Natural Language Processing'
-    ai.redhat.com/use-case: 'Customer Support'
+    ai.redhat.com/usecase: 'Customer Support'
     ai.redhat.com/status: 'Production'
-    ai.redhat.com/domain: 'Business Applications'
+    ai.redhat.com/domain: 'internal'
     ai.redhat.com/featured: 'true'
+    ai.redhat.com/maturity: 'graduated'
     ai.redhat.com/velocity: 'test-velocity'
 spec:
   type: service
@@ -44,10 +45,11 @@ metadata:
     - quality-control
   annotations:
     ai.redhat.com/category: 'Computer Vision'
-    ai.redhat.com/use-case: 'Quality Assurance'
+    ai.redhat.com/usecase: 'Quality Assurance'
     ai.redhat.com/status: 'Production'
-    ai.redhat.com/domain: 'Manufacturing'
+    ai.redhat.com/domain: 'internal'
     ai.redhat.com/featured: 'true'
+    ai.redhat.com/maturity: 'sandbox'
     ai.redhat.com/velocity: 'test-velocity'
 spec:
   type: service
@@ -72,10 +74,10 @@ metadata:
     - maintenance
   annotations:
     ai.redhat.com/category: 'Predictive Analytics'
-    ai.redhat.com/use-case: 'Asset Management'
+    ai.redhat.com/usecase: 'Asset Management'
     ai.redhat.com/status: 'Production'
-    ai.redhat.com/domain: 'Operations'
-    ai.redhat.com/velocity: 'test-velocity'
+    ai.redhat.com/domain: 'external'
+    ai.redhat.com/maturity: 'sandbox'
 spec:
   type: service
   lifecycle: production
@@ -99,9 +101,10 @@ metadata:
     - fintech
   annotations:
     ai.redhat.com/category: 'Anomaly Detection'
-    ai.redhat.com/use-case: 'Security'
+    ai.redhat.com/usecase: 'Security'
     ai.redhat.com/status: 'Production'
-    ai.redhat.com/domain: 'Financial Services'
+    ai.redhat.com/domain: 'external'
+    ai.redhat.com/maturity: 'sandbox'
     ai.redhat.com/velocity: 'test-velocity'
 spec:
   type: service
@@ -126,9 +129,10 @@ metadata:
     - automation
   annotations:
     ai.redhat.com/category: 'Natural Language Processing'
-    ai.redhat.com/use-case: 'Document Processing'
+    ai.redhat.com/usecase: 'Document Processing'
     ai.redhat.com/status: 'Beta'
-    ai.redhat.com/domain: 'Business Applications'
+    ai.redhat.com/domain: 'internal'
+    ai.redhat.com/maturity: 'sandbox'
 spec:
   type: service
   lifecycle: experimental
@@ -152,9 +156,10 @@ metadata:
     - e-commerce
   annotations:
     ai.redhat.com/category: 'Recommendation Systems'
-    ai.redhat.com/use-case: 'Personalization'
+    ai.redhat.com/usecase: 'Personalization'
     ai.redhat.com/status: 'Production'
-    ai.redhat.com/domain: 'E-commerce'
+    ai.redhat.com/domain: 'internal'
+    ai.redhat.com/maturity: 'sandbox'
 spec:
   type: service
   lifecycle: production
@@ -178,9 +183,10 @@ metadata:
     - customer-insights
   annotations:
     ai.redhat.com/category: 'Natural Language Processing'
-    ai.redhat.com/use-case: 'Customer Insights'
+    ai.redhat.com/usecase: 'Customer Insights'
     ai.redhat.com/status: 'Production'
-    ai.redhat.com/domain: 'Marketing'
+    ai.redhat.com/domain: 'internal'
+    ai.redhat.com/maturity: 'sandbox'
 spec:
   type: service
   lifecycle: production
@@ -204,10 +210,11 @@ metadata:
     - productivity
   annotations:
     ai.redhat.com/category: 'Code Generation'
-    ai.redhat.com/use-case: 'Developer Productivity'
+    ai.redhat.com/usecase: 'Developer Productivity'
     ai.redhat.com/status: 'Beta'
-    ai.redhat.com/domain: 'Software Development'
+    ai.redhat.com/domain: 'external'
     ai.redhat.com/featured: 'true'
+    ai.redhat.com/maturity: 'incubating'
 spec:
   type: service
   lifecycle: experimental
@@ -231,9 +238,10 @@ metadata:
     - planning
   annotations:
     ai.redhat.com/category: 'Predictive Analytics'
-    ai.redhat.com/use-case: 'Demand Planning'
+    ai.redhat.com/usecase: 'Demand Planning'
     ai.redhat.com/status: 'Production'
-    ai.redhat.com/domain: 'Supply Chain'
+    ai.redhat.com/domain: 'internal'
+    ai.redhat.com/maturity: 'sandbox'
 spec:
   type: service
   lifecycle: production
@@ -257,9 +265,10 @@ metadata:
     - nlp
   annotations:
     ai.redhat.com/category: 'Speech & Audio'
-    ai.redhat.com/use-case: 'Voice Interfaces'
+    ai.redhat.com/usecase: 'Voice Interfaces'
     ai.redhat.com/status: 'Beta'
-    ai.redhat.com/domain: 'Consumer Applications'
+    ai.redhat.com/domain: 'internal'
+    ai.redhat.com/maturity: 'sandbox'
 spec:
   type: service
   lifecycle: experimental

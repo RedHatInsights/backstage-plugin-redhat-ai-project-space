@@ -26,6 +26,7 @@ export function AIShowcasePage() {
     usecase: '',
     status: '',
     domain: '',
+    maturity: '',
     featured: false,
     tags: [],
   });
@@ -57,6 +58,7 @@ export function AIShowcasePage() {
     const usecases = new Set<string>();
     const statuses = new Set<string>();
     const domains = new Set<string>();
+    const maturities = new Set<string>();
     const tags = new Set<string>();
 
     entities.forEach(entity => {
@@ -64,11 +66,13 @@ export function AIShowcasePage() {
       const usecase = getAnnotation(entity, 'use-case');
       const status = getAnnotation(entity, 'status');
       const domain = getAnnotation(entity, 'domain');
+      const maturity = getAnnotation(entity, 'maturity');
 
       if (category !== '-') categories.add(category);
       if (usecase !== '-') usecases.add(usecase);
       if (status !== '-') statuses.add(status);
       if (domain !== '-') domains.add(domain);
+      if (maturity !== '-') maturities.add(maturity);
 
       // Extract tags from entity metadata
       if (entity.metadata.tags) {
@@ -81,6 +85,7 @@ export function AIShowcasePage() {
       usecases: Array.from(usecases).sort(),
       statuses: Array.from(statuses).sort(),
       domains: Array.from(domains).sort(),
+      maturities: Array.from(maturities).sort(),
       tags: Array.from(tags).sort(),
     };
   }, [entities]);
@@ -109,6 +114,10 @@ export function AIShowcasePage() {
       if (filters.domain) {
         const domain = getAnnotation(entity, 'domain');
         if (domain !== filters.domain) return false;
+      }
+      if (filters.maturity) {
+        const maturity = getAnnotation(entity, 'maturity');
+        if (maturity !== filters.maturity) return false;
       }
       
       // Apply tag filter (additive - show entities with ANY of the selected tags)
@@ -156,12 +165,13 @@ export function AIShowcasePage() {
       usecase: '',
       status: '',
       domain: '',
+      maturity: '',
       featured: false,
       tags: [],
     });
   };
 
-  const hasActiveFilters = !!(filters.category || filters.usecase || filters.status || filters.domain || filters.featured || filters.tags.length > 0);
+  const hasActiveFilters = !!(filters.category || filters.usecase || filters.status || filters.domain || filters.maturity || filters.featured || filters.tags.length > 0);
 
   return (
     <Page themeId="tool">

@@ -35,10 +35,11 @@ export const buildAIProjectContext = async (catalogApi: CatalogApi): Promise<str
       const description = entity.metadata.description || 'No description available';
       const tags = entity.metadata.tags?.join(', ') || 'none';
       const category = getAnnotation(entity, 'category');
-      const usecase = getAnnotation(entity, 'use-case');
-      const owner = getAnnotation(entity, 'owner');
+      const usecase = getAnnotation(entity, 'usecase');
+      const owner = (entity.spec?.owner as string) || '-';
       const domain = getAnnotation(entity, 'domain');
       const status = getAnnotation(entity, 'status');
+      const maturity = getAnnotation(entity, 'maturity');
       const featured = isFeatured(entity);
       
       // Extract source location from annotations
@@ -52,7 +53,7 @@ export const buildAIProjectContext = async (catalogApi: CatalogApi): Promise<str
         : sourceLocation;
 
       // Build prose description
-      let proseDescription = `${title} is ${description}. It has project tags of ${tags}. It is a ${category} category tool with a ${usecase} use case, owned by ${owner}. It is an ${domain} tool, and ${status}, and its source code location is ${cleanSourceLocation}.`;
+      let proseDescription = `${title} is ${description}. It has project tags of ${tags}. It is a ${category} category tool with a ${usecase} use case, owned by ${owner}. It is an ${domain} tool, ${status}, with a maturity level of ${maturity}, and its source code location is ${cleanSourceLocation}.`;
       
       // Add featured status if applicable
       if (featured) {

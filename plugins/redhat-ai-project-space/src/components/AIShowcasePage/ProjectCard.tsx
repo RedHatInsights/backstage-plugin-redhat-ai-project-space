@@ -15,6 +15,15 @@ const useStyles = makeStyles((theme) => ({
       boxShadow: theme.shadows[4],
     },
   },
+  cardGraduated: {
+    backgroundColor: 'rgba(255, 152, 0, 0.25)',
+  },
+  cardIncubating: {
+    backgroundColor: 'rgba(33, 150, 243, 0.25)',
+  },
+  cardSandbox: {
+    backgroundColor: 'rgba(76, 175, 80, 0.25)',
+  },
   titleRow: {
     marginBottom: theme.spacing(1),
     display: 'flex',
@@ -74,6 +83,8 @@ const useStyles = makeStyles((theme) => ({
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
     maxWidth: '150px',
+    textDecoration: 'none',
+    flexShrink: 1,
   },
   tagChip: {
     margin: theme.spacing(0.25),
@@ -107,6 +118,30 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: '#fb8c00',
     },
   },
+  maturityChipGraduated: {
+    backgroundColor: '#ff9800',
+    color: '#fff',
+    fontWeight: 600,
+    '&:hover': {
+      backgroundColor: '#fb8c00',
+    },
+  },
+  maturityChipIncubating: {
+    backgroundColor: '#2196f3',
+    color: '#fff',
+    fontWeight: 600,
+    '&:hover': {
+      backgroundColor: '#1976d2',
+    },
+  },
+  maturityChipSandbox: {
+    backgroundColor: '#4caf50',
+    color: '#fff',
+    fontWeight: 600,
+    '&:hover': {
+      backgroundColor: '#45a049',
+    },
+  },
 }));
 
 interface ProjectCardProps {
@@ -121,16 +156,32 @@ export function ProjectCard({ entity, votes, onVoteChange }: ProjectCardProps) {
   const category = getAnnotation(entity, 'category');
   const usecase = getAnnotation(entity, 'use-case');
   const status = getAnnotation(entity, 'status');
-  const owner = getAnnotation(entity, 'owner');
+  const owner = (entity.spec?.owner as string) || '-';
   const domain = getAnnotation(entity, 'domain');
+  const maturity = getAnnotation(entity, 'maturity');
   const velocity = getAnnotation(entity, 'velocity');
   const featured = isFeatured(entity);
   
   // Generate a unique project ID from the entity
   const projectId = `${entity.metadata.namespace}/${entity.kind.toLowerCase()}/${entity.metadata.name}`;
 
+  // Determine card background based on maturity
+  const getCardClass = () => {
+    const baseClass = classes.card;
+    const maturityLower = maturity.toLowerCase();
+
+    if (maturityLower === 'graduated') {
+      return `${baseClass} ${classes.cardGraduated}`;
+    } else if (maturityLower === 'incubating') {
+      return `${baseClass} ${classes.cardIncubating}`;
+    } else if (maturityLower === 'sandbox') {
+      return `${baseClass} ${classes.cardSandbox}`;
+    }
+    return baseClass;
+  };
+
   return (
-    <Card className={classes.card}>
+    <Card className={getCardClass()}>
       <CardContent>
         {/* Title Row */}
         <Box className={classes.titleRow}>
@@ -144,6 +195,21 @@ export function ProjectCard({ entity, votes, onVoteChange }: ProjectCardProps) {
             >
               {entity.metadata.title || entity.metadata.name}
             </Link>
+            {maturity !== '-' && (
+              <Chip
+                label={maturity}
+                size="small"
+                className={
+                  maturity.toLowerCase() === 'graduated'
+                    ? classes.maturityChipGraduated
+                    : maturity.toLowerCase() === 'incubating'
+                    ? classes.maturityChipIncubating
+                    : maturity.toLowerCase() === 'sandbox'
+                    ? classes.maturityChipSandbox
+                    : undefined
+                }
+              />
+            )}
           </Box>
           <Link
             to={`/catalog/${entity.metadata.namespace}/${entity.kind.toLowerCase()}/${
