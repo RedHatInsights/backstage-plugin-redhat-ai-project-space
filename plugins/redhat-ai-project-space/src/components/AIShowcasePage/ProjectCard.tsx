@@ -15,6 +15,15 @@ const useStyles = makeStyles((theme) => ({
       boxShadow: theme.shadows[4],
     },
   },
+  cardGraduated: {
+    backgroundColor: 'rgba(255, 152, 0, 0.25)',
+  },
+  cardIncubating: {
+    backgroundColor: 'rgba(33, 150, 243, 0.25)',
+  },
+  cardSandbox: {
+    backgroundColor: 'rgba(76, 175, 80, 0.25)',
+  },
   titleRow: {
     marginBottom: theme.spacing(1),
     display: 'flex',
@@ -105,11 +114,11 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   maturityChipGraduated: {
-    backgroundColor: '#4caf50',
+    backgroundColor: '#ff9800',
     color: '#fff',
     fontWeight: 600,
     '&:hover': {
-      backgroundColor: '#45a049',
+      backgroundColor: '#fb8c00',
     },
   },
   maturityChipIncubating: {
@@ -121,11 +130,11 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   maturityChipSandbox: {
-    backgroundColor: '#ff9800',
+    backgroundColor: '#4caf50',
     color: '#fff',
     fontWeight: 600,
     '&:hover': {
-      backgroundColor: '#fb8c00',
+      backgroundColor: '#45a049',
     },
   },
 }));
@@ -150,13 +159,36 @@ export function ProjectCard({ entity, votes, onVoteChange }: ProjectCardProps) {
   // Generate a unique project ID from the entity
   const projectId = `${entity.metadata.namespace}/${entity.kind.toLowerCase()}/${entity.metadata.name}`;
 
+  // Determine card background based on maturity
+  const getCardClass = () => {
+    const baseClass = classes.card;
+    const maturityLower = maturity.toLowerCase();
+
+    if (maturityLower === 'graduated') {
+      return `${baseClass} ${classes.cardGraduated}`;
+    } else if (maturityLower === 'incubating') {
+      return `${baseClass} ${classes.cardIncubating}`;
+    } else if (maturityLower === 'sandbox') {
+      return `${baseClass} ${classes.cardSandbox}`;
+    }
+    return baseClass;
+  };
+
   return (
-    <Card className={classes.card}>
+    <Card className={getCardClass()}>
       <CardContent>
         {/* Title Row */}
         <Box className={classes.titleRow}>
           <Box className={classes.titleContainer}>
             {featured && <StarIcon className={classes.starIcon} />}
+            <Link
+              to={`/catalog/${entity.metadata.namespace}/${entity.kind.toLowerCase()}/${
+                entity.metadata.name
+              }`}
+              className={classes.title}
+            >
+              {entity.metadata.title || entity.metadata.name}
+            </Link>
             {maturity !== '-' && (
               <Chip
                 label={maturity}
@@ -172,14 +204,6 @@ export function ProjectCard({ entity, votes, onVoteChange }: ProjectCardProps) {
                 }
               />
             )}
-            <Link
-              to={`/catalog/${entity.metadata.namespace}/${entity.kind.toLowerCase()}/${
-                entity.metadata.name
-              }`}
-              className={classes.title}
-            >
-              {entity.metadata.title || entity.metadata.name}
-            </Link>
           </Box>
           <Link
             to={`/catalog/${entity.metadata.namespace}/${entity.kind.toLowerCase()}/${
