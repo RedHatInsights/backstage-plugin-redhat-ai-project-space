@@ -123,3 +123,73 @@ describe('ProjectCard - Velocity ID', () => {
     });
   });
 });
+
+describe('ProjectCard - Maturity Levels', () => {
+  it('should display maturity chip for graduated projects', () => {
+    const entity = createMockEntity('VEL-123');
+    entity.metadata.annotations!['ai.redhat.com/maturity'] = 'Graduated';
+
+    const { container } = renderWithRouter(<ProjectCard entity={entity} />);
+
+    expect(screen.getByText('Graduated')).toBeInTheDocument();
+
+    // Check that the card has the graduated background class
+    const card = container.querySelector('.MuiCard-root');
+    expect(card?.className).toContain('cardGraduated');
+  });
+
+  it('should display maturity chip for incubating projects', () => {
+    const entity = createMockEntity('VEL-123');
+    entity.metadata.annotations!['ai.redhat.com/maturity'] = 'Incubating';
+
+    const { container } = renderWithRouter(<ProjectCard entity={entity} />);
+
+    expect(screen.getByText('Incubating')).toBeInTheDocument();
+
+    // Check that the card has the incubating background class
+    const card = container.querySelector('.MuiCard-root');
+    expect(card?.className).toContain('cardIncubating');
+  });
+
+  it('should display maturity chip for sandbox projects', () => {
+    const entity = createMockEntity('VEL-123');
+    entity.metadata.annotations!['ai.redhat.com/maturity'] = 'Sandbox';
+
+    const { container } = renderWithRouter(<ProjectCard entity={entity} />);
+
+    expect(screen.getByText('Sandbox')).toBeInTheDocument();
+
+    // Check that the card has the sandbox background class
+    const card = container.querySelector('.MuiCard-root');
+    expect(card?.className).toContain('cardSandbox');
+  });
+
+  it('should not display maturity chip when maturity is not set', () => {
+    const entity = createMockEntity('VEL-123');
+    // Don't set maturity annotation
+
+    renderWithRouter(<ProjectCard entity={entity} />);
+
+    // Maturity chip should not be rendered (no chip with maturity text)
+    expect(screen.queryByText('Graduated')).not.toBeInTheDocument();
+    expect(screen.queryByText('Incubating')).not.toBeInTheDocument();
+    expect(screen.queryByText('Sandbox')).not.toBeInTheDocument();
+  });
+
+  it('should handle case-insensitive maturity values for card background', () => {
+    const testCases = ['graduated', 'GRADUATED', 'GrAdUaTeD'];
+
+    testCases.forEach(maturity => {
+      const entity = createMockEntity('VEL-123');
+      entity.metadata.annotations!['ai.redhat.com/maturity'] = maturity;
+
+      const { container, unmount } = renderWithRouter(<ProjectCard entity={entity} />);
+
+      // Should still apply the graduated background class
+      const card = container.querySelector('.MuiCard-root');
+      expect(card?.className).toContain('cardGraduated');
+
+      unmount();
+    });
+  });
+});
