@@ -116,11 +116,22 @@ export function ProjectsList({ entities, sortBy }: ProjectsListProps) {
             color="primary"
             className={classes.feedbackButton}
             startIcon={<FeedbackIcon />}
-            href="https://issues.redhat.com/browse/RHCLOUD-43344"
+            href="https://issues.redhat.com/secure/CreateIssueDetails!default.jspa?projectKey=ENGPROD&issuetype=3"
             target="_blank"
             rel="noopener noreferrer"
           >
-            Feedback
+            Feature Request
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            className={classes.feedbackButton}
+            startIcon={<FeedbackIcon />}
+            href="https://issues.redhat.com/secure/CreateIssueDetails!default.jspa?projectKey=ENGPROD&issuetype=1"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Report Bug
           </Button>
           <Button
             variant="contained"
