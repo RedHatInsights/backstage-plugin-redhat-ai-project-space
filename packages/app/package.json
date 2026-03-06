@@ -45,7 +45,7 @@
     "@material-ui/icons": "^4.9.1",
     "backstage-plugin-redhat-ai-project-space": "link:../../plugins/redhat-ai-project-space",
     "react": "^18.0.2",
-    "react-dom": "^18.0.2",
+    "react-dom": "^19.2.4",
     "react-router": "^6.3.0",
     "react-router-dom": "^6.3.0"
   },
