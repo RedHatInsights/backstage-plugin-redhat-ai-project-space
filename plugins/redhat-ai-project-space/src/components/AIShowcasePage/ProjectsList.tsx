@@ -7,6 +7,7 @@ import HelpIcon from '@material-ui/icons/Help';
 import FeedbackIcon from '@material-ui/icons/Feedback';
 import { ProjectCard } from './ProjectCard';
 import { useProjectVotes } from '../../hooks/useProjectVotes';
+import { Assignment } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
   header: {
@@ -24,6 +25,9 @@ const useStyles = makeStyles((theme) => ({
     gap: theme.spacing(1),
   },
   addProjectButton: {
+    textTransform: 'none',
+  },
+  requestProjectClassification: {
     textTransform: 'none',
   },
   helpButton: {
@@ -130,6 +134,15 @@ export function ProjectsList({ entities, sortBy }: ProjectsListProps) {
             href="/create/templates/ai/add-new-ai-project"
           >
             Add New Project
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            className={classes.requestProjectClassification}
+            startIcon={<Assignment />}
+            href="/create/templates/ai/request-project-classification"
+          >
+            Request Reclassification
           </Button>
 
         </Box>
