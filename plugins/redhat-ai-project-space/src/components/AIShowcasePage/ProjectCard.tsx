@@ -16,13 +16,22 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   cardGraduated: {
-    backgroundColor: 'rgba(255, 152, 0, 0.25)',
+    backgroundColor: 'rgba(255, 152, 0, 0.25) !important',
+    '&:hover': {
+      backgroundColor: 'rgba(255, 152, 0, 0.25) !important',
+    },
   },
   cardIncubating: {
-    backgroundColor: 'rgba(33, 150, 243, 0.25)',
+    backgroundColor: 'rgba(33, 150, 243, 0.25) !important',
+    '&:hover': {
+      backgroundColor: 'rgba(33, 150, 243, 0.25) !important',
+    },
   },
   cardSandbox: {
-    backgroundColor: 'rgba(76, 175, 80, 0.25)',
+    backgroundColor: 'rgba(76, 175, 80, 0.25) !important',
+    '&:hover': {
+      backgroundColor: 'rgba(76, 175, 80, 0.25) !important',
+    },
   },
   titleRow: {
     marginBottom: theme.spacing(1),
@@ -105,41 +114,56 @@ const useStyles = makeStyles((theme) => ({
     borderTop: `1px solid ${theme.palette.divider}`,
   },
   internalProjectChip: {
-    backgroundColor: '#4caf50',
-    color: '#fff',
+    backgroundColor: '#4caf50 !important',
+    color: '#fff !important',
+    '& .MuiChip-label': {
+      color: '#fff',
+    },
     '&:hover': {
-      backgroundColor: '#45a049',
+      backgroundColor: '#45a049 !important',
     },
   },
   externalProjectChip: {
-    backgroundColor: '#ff9800',
-    color: '#fff',
+    backgroundColor: '#ff9800 !important',
+    color: '#fff !important',
+    '& .MuiChip-label': {
+      color: '#fff',
+    },
     '&:hover': {
-      backgroundColor: '#fb8c00',
+      backgroundColor: '#fb8c00 !important',
     },
   },
   maturityChipGraduated: {
-    backgroundColor: '#ff9800',
-    color: '#fff',
+    backgroundColor: '#ff9800 !important',
+    color: '#fff !important',
     fontWeight: 600,
+    '& .MuiChip-label': {
+      color: '#fff',
+    },
     '&:hover': {
-      backgroundColor: '#fb8c00',
+      backgroundColor: '#fb8c00 !important',
     },
   },
   maturityChipIncubating: {
-    backgroundColor: '#2196f3',
-    color: '#fff',
+    backgroundColor: '#2196f3 !important',
+    color: '#fff !important',
     fontWeight: 600,
+    '& .MuiChip-label': {
+      color: '#fff',
+    },
     '&:hover': {
-      backgroundColor: '#1976d2',
+      backgroundColor: '#1976d2 !important',
     },
   },
   maturityChipSandbox: {
-    backgroundColor: '#4caf50',
-    color: '#fff',
+    backgroundColor: '#4caf50 !important',
+    color: '#fff !important',
     fontWeight: 600,
+    '& .MuiChip-label': {
+      color: '#fff',
+    },
     '&:hover': {
-      backgroundColor: '#45a049',
+      backgroundColor: '#45a049 !important',
     },
   },
 }));
@@ -161,27 +185,29 @@ export function ProjectCard({ entity, votes, onVoteChange }: ProjectCardProps) {
   const maturity = getAnnotation(entity, 'maturity');
   const velocity = getAnnotation(entity, 'velocity');
   const featured = isFeatured(entity);
-  
+
   // Generate a unique project ID from the entity
   const projectId = `${entity.metadata.namespace}/${entity.kind.toLowerCase()}/${entity.metadata.name}`;
 
-  // Determine card background based on maturity
-  const getCardClass = () => {
-    const baseClass = classes.card;
-    const maturityLower = maturity.toLowerCase();
+  // Determine card classes and background color based on maturity
+  const cardClasses = [classes.card];
+  const maturityLower = maturity.toLowerCase();
+  let cardBackgroundColor: string | undefined;
 
-    if (maturityLower === 'graduated') {
-      return `${baseClass} ${classes.cardGraduated}`;
-    } else if (maturityLower === 'incubating') {
-      return `${baseClass} ${classes.cardIncubating}`;
-    } else if (maturityLower === 'sandbox') {
-      return `${baseClass} ${classes.cardSandbox}`;
-    }
-    return baseClass;
-  };
+  if (maturityLower === 'graduated') {
+    cardClasses.push(classes.cardGraduated);
+    cardBackgroundColor = 'rgba(255, 152, 0, 0.25)';
+  } else if (maturityLower === 'incubating') {
+    cardClasses.push(classes.cardIncubating);
+    cardBackgroundColor = 'rgba(33, 150, 243, 0.25)';
+  } else if (maturityLower === 'sandbox') {
+    cardClasses.push(classes.cardSandbox);
+    cardBackgroundColor = 'rgba(76, 175, 80, 0.25)';
+  }
+
 
   return (
-    <Card className={getCardClass()}>
+    <Card className={cardClasses.join(' ')} style={{ backgroundColor: cardBackgroundColor }}>
       <CardContent>
         {/* Title Row */}
         <Box className={classes.titleRow}>
