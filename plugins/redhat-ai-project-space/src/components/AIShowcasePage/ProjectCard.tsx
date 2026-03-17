@@ -17,19 +17,37 @@ const useStyles = makeStyles((theme) => ({
   },
   cardGraduated: {
     backgroundColor: 'rgba(255, 152, 0, 0.25) !important',
+    '& .MuiCardContent-root': {
+      backgroundColor: 'rgba(255, 152, 0, 0.25) !important',
+    },
     '&:hover': {
+      backgroundColor: 'rgba(255, 152, 0, 0.25) !important',
+    },
+    '&:hover .MuiCardContent-root': {
       backgroundColor: 'rgba(255, 152, 0, 0.25) !important',
     },
   },
   cardIncubating: {
     backgroundColor: 'rgba(33, 150, 243, 0.25) !important',
+    '& .MuiCardContent-root': {
+      backgroundColor: 'rgba(33, 150, 243, 0.25) !important',
+    },
     '&:hover': {
+      backgroundColor: 'rgba(33, 150, 243, 0.25) !important',
+    },
+    '&:hover .MuiCardContent-root': {
       backgroundColor: 'rgba(33, 150, 243, 0.25) !important',
     },
   },
   cardSandbox: {
     backgroundColor: 'rgba(76, 175, 80, 0.25) !important',
+    '& .MuiCardContent-root': {
+      backgroundColor: 'rgba(76, 175, 80, 0.25) !important',
+    },
     '&:hover': {
+      backgroundColor: 'rgba(76, 175, 80, 0.25) !important',
+    },
+    '&:hover .MuiCardContent-root': {
       backgroundColor: 'rgba(76, 175, 80, 0.25) !important',
     },
   },
@@ -208,7 +226,7 @@ export function ProjectCard({ entity, votes, onVoteChange }: ProjectCardProps) {
 
   return (
     <Card className={cardClasses.join(' ')} style={{ backgroundColor: cardBackgroundColor }}>
-      <CardContent>
+      <CardContent style={{ backgroundColor: cardBackgroundColor }}>
         {/* Title Row */}
         <Box className={classes.titleRow}>
           <Box className={classes.titleContainer}>
