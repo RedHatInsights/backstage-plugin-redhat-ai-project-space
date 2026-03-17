@@ -1,5 +1,5 @@
 import { Knex } from 'knex';
-import { resolvePackagePath } from '@backstage/backend-common';
+import { resolvePackagePath } from '@backstage/backend-plugin-api';
 
 export interface ProjectVote {
   project_id: string;
