@@ -1,6 +1,8 @@
 # Red Hat AI Project Space - Backstage Plugin
 
-A Backstage plugin for showcasing and exploring AI/ML projects within your organization. This plugin provides an interactive showcase page with advanced filtering, search, voting capabilities, and a floating chat interface.
+A Backstage plugin for showcasing and exploring AI/ML projects within your organization. This plugin
+provides an interactive showcase page with advanced filtering, search, voting capabilities, and a
+floating chat interface.
 
 ## Features
 
@@ -16,20 +18,26 @@ A Backstage plugin for showcasing and exploring AI/ML projects within your organ
 - **Search**: Real-time search across project names, descriptions, and metadata
 - **Voting System**: Upvote/downvote projects with persistent vote tracking
 - **Sorting**: Sort projects alphabetically or by vote count
-- **Floating Chat**: Interactive chat interface for project assistance
+- **Floating Chat**: Interactive chat interface for AI-assisted project discovery
 - **Responsive Design**: Works seamlessly on desktop and mobile devices
 
 ## Architecture
 
 The plugin consists of two packages:
 
-1. **Frontend Plugin** (`plugins/redhat-ai-project-space`): React-based UI components for the showcase page
-2. **Backend Plugin** (`plugins/redhat-ai-project-space-backend`): REST API for voting functionality with database persistence
+1. **Frontend Plugin** (`plugins/redhat-ai-project-space`): React-based UI components for the
+   showcase page
+2. **Backend Plugin** (`plugins/redhat-ai-project-space-backend`): REST API for voting functionality
+   with database persistence
+
+For internal design details, data flow diagrams, database schema, and design tradeoffs, see the
+[architecture documentation][architecture].
 
 ## Prerequisites
 
-- Node.js 22+ and Yarn
-- A running Backstage instance (v1.x)
+- Node.js (22 or 24)
+- Yarn
+- A running Backstage instance
 - PostgreSQL or SQLite database (for vote persistence)
 
 ## Installation
@@ -44,7 +52,7 @@ yarn install
 
 ### 2. Add Backend Plugin
 
-The backend plugin is already registered in `packages/backend/src/index.ts`:
+Register the backend plugin in `packages/backend/src/index.ts`:
 
 ```typescript
 // redhat ai project space plugin
@@ -53,7 +61,7 @@ backend.add(import('backstage-plugin-redhat-ai-project-space-backend'));
 
 ### 3. Add Frontend Plugin
 
-The frontend component is imported in `packages/app/src/App.tsx`:
+Import and mount the frontend component in `packages/app/src/App.tsx`:
 
 ```typescript
 import { AIShowcasePageComponent } from 'backstage-plugin-redhat-ai-project-space';
@@ -78,7 +86,8 @@ catalog:
 
 ### 5. Create AI Projects
 
-Create catalog entries for your AI projects in `catalog_default/components/ai-projects.yaml`:
+Create catalog entries for your AI projects. Each entity must be a `Component` in the `ai`
+namespace. See `catalog_default/components/ai-projects.yaml` for sample entries:
 
 ```yaml
 ---
@@ -109,28 +118,26 @@ spec:
 
 ## Running Locally
 
-### Start the Backend
-
 From the project root:
 
 ```bash
 yarn install
-yarn dev
+yarn start
 ```
 
 This will start:
+
 - Backend on `http://localhost:7007`
 - Frontend on `http://localhost:3000`
 
-### Access the Plugin
-
-Navigate to: `http://localhost:3000/ai-showcase`
+Navigate to `http://localhost:3000/ai-showcase` to access the plugin.
 
 ## Configuration
 
 ### Database Setup
 
-The backend plugin uses the Backstage database configuration. For local development, it uses SQLite in-memory by default (configured in `app-config.yaml`):
+The backend plugin uses the Backstage database configuration. For local development, it uses SQLite
+in-memory by default (configured in `app-config.yaml`):
 
 ```yaml
 backend:
@@ -171,8 +178,8 @@ The plugin recognizes these custom annotations on catalog entities:
 ```
 .
 ├── packages/
-│   ├── app/                    # Backstage frontend app
-│   └── backend/                # Backstage backend app
+│   ├── app/                    # Backstage frontend app (dev harness)
+│   └── backend/                # Backstage backend app (dev harness)
 ├── plugins/
 │   ├── redhat-ai-project-space/           # Frontend plugin
 │   │   ├── src/
@@ -195,23 +202,23 @@ The plugin recognizes these custom annotations on catalog entities:
 │       │   └── plugin.ts
 │       ├── migrations/        # Database migrations
 │       └── package.json
-└── catalog_default/
-    └── components/
-        └── ai-projects.yaml   # Sample AI projects
+├── catalog_default/
+│   └── components/
+│       └── ai-projects.yaml   # Sample AI projects
+└── build.sh                   # Dynamic plugin build and packaging script
 ```
 
 ## Development
 
-### Building the Plugin
+### Building
 
 ```bash
-# Build frontend plugin
-cd plugins/redhat-ai-project-space
-yarn build
+# Build all packages
+yarn build:all
 
-# Build backend plugin
-cd plugins/redhat-ai-project-space-backend
-yarn build
+# Build individual plugins
+yarn workspace backstage-plugin-redhat-ai-project-space build
+yarn workspace backstage-plugin-redhat-ai-project-space-backend build
 ```
 
 ### Running Tests
@@ -220,34 +227,54 @@ yarn build
 # Run all tests
 yarn test
 
-# Run tests for specific plugin
-cd plugins/redhat-ai-project-space
-yarn test
+# Run all tests with coverage
+yarn test:all
+
+# Run tests for a specific plugin
+yarn workspace backstage-plugin-redhat-ai-project-space test
+yarn workspace backstage-plugin-redhat-ai-project-space-backend test
 ```
 
 ### Linting
 
 ```bash
-# Lint all code
+# Lint changed files (against origin/main)
 yarn lint
+
+# Lint all files
+yarn lint:all
 
 # Fix linting issues
 yarn lint:fix
+
+# Check formatting
+yarn prettier:check
 ```
 
 ### Export as Dynamic Plugin
 
-Both plugins support dynamic plugin export for use with Janus IDP:
+Both plugins support dynamic plugin export for use with Red Hat Developer Hub:
 
 ```bash
 # Frontend plugin
-cd plugins/redhat-ai-project-space
-yarn export-dynamic
+yarn workspace backstage-plugin-redhat-ai-project-space export-dynamic
 
 # Backend plugin
-cd plugins/redhat-ai-project-space-backend
-yarn export-dynamic
+yarn workspace backstage-plugin-redhat-ai-project-space-backend export-dynamic
+
+# Build and package a dynamic plugin (produces tarball with integrity hash)
+./build.sh <workspace-name> <plugin-dir-name>
+# Example:
+./build.sh backstage-plugin-redhat-ai-project-space-backend redhat-ai-project-space-backend
 ```
+
+### Docker Image
+
+```bash
+yarn build-image
+```
+
+This builds a Docker image using `packages/backend/Dockerfile`.
 
 ## API Reference
 
@@ -257,13 +284,14 @@ The backend plugin exposes the following REST API:
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
+| `GET` | `/api/redhat-ai-project-space-backend/health` | Health check endpoint |
+| `GET` | `/api/redhat-ai-project-space-backend/votes` | Get all project vote aggregates |
+| `GET` | `/api/redhat-ai-project-space-backend/votes/:projectId` | Get vote ratio for a project |
 | `POST` | `/api/redhat-ai-project-space-backend/votes/:projectId/upvote` | Upvote a project |
 | `POST` | `/api/redhat-ai-project-space-backend/votes/:projectId/downvote` | Downvote a project |
-| `GET` | `/api/redhat-ai-project-space-backend/votes/:projectId` | Get vote ratio for project |
-| `GET` | `/api/redhat-ai-project-space-backend/votes` | Get all vote ratios |
-| `GET` | `/api/redhat-ai-project-space-backend/health` | Health check endpoint |
+| `DELETE` | `/api/redhat-ai-project-space-backend/votes/:projectId` | Delete votes for a project |
 
-### Frontend API
+### Frontend Exports
 
 The frontend plugin exports:
 
@@ -272,10 +300,12 @@ import {
   redhatAIProjectSpacePlugin,
   AIShowcasePageComponent,
   projectVotesApiRef,
-  ProjectVotesClient
+  ProjectVotesClient,
 } from 'backstage-plugin-redhat-ai-project-space';
 ```
 
----
+## License
 
-Built with ❤️ for the Red Hat AI community
+This project is licensed under the Apache-2.0 License.
+
+[architecture]: ./ARCHITECTURE.md
