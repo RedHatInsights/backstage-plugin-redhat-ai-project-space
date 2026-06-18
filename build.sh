@@ -53,4 +53,3 @@ echo "SHA checksum: $SHA_SUM"
 
 # Output the SHA checksum to a file with the same name as the tarball but with '-integrity.txt'
 echo "$SHA_SUM" > "build/$PLUGIN_DIR_NAME/${TARBALL%.tgz}-integrity.txt"
-
